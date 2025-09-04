@@ -1,0 +1,282 @@
+# https://docs.docker.com/reference/compose-file/services/
+services:
+  tor:
+    build:
+      context: ./services/tor
+    cap_drop:
+      - ALL
+    container_name: tor
+    healthcheck:
+      interval: 1s
+      retries: 30
+      start_period: 30s
+      test: [CMD, ls, /var/lib/tor/control_auth_cookie]
+    image: bitcoin-node-docker/tor:latest
+    logging:
+      driver: none
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - tor:/var/lib/tor
+    networks:
+      default: {}
+      private:
+        ipv4_address: 172.18.0.2
+    profiles: [bitcoin-core-over-tor, bitcoin-knots-over-tor]
+    user: tor
+    command: >
+      tor
+  bitcoin-core:
+    build:
+      args:
+        - BITCOIN_CORE_VERSION=${BITCOIN_CORE_VERSION}
+      context: ./services/bitcoin-core
+    cap_drop:
+      - ALL
+    container_name: bitcoin-core
+    healthcheck:
+      interval: 1s
+      retries: 30
+      start_period: 30s
+      test: [CMD, ls, /home/bitcoin/.bitcoin/.cookie]
+    logging:
+      driver: none
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 10m
+    volumes:
+      - /mnt/bitcoind:/home/bitcoin/.bitcoin
+      - bitcoind:/var/lib/bitcoind
+      - tor:/var/lib/tor:ro
+    networks:
+      private:
+        ipv4_address: 172.18.0.3
+    profiles: [base]
+    user: bitcoin
+    # See https://github.com/bitcoin/bitcoin/blob/29.x/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=83
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -listen=1
+        -listenonion=1
+        -onion=172.18.0.2:9050
+        -onlynet=onion
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -rpccookiefile=/var/lib/bitcoind/.cookie
+        -server=1
+        -torcontrol=172.18.0.2:9051
+        -txindex=1
+  bitcoin-core-over-mullvad:
+    container_name: bitcoin-core-over-mullvad
+    extends:
+      service: bitcoin-core
+    image: bitcoin-node-docker/bitcoin-core-over-mullvad:${BITCOIN_CORE_VERSION}
+    profiles: [bitcoin-core-over-mullvad]
+    # See https://github.com/bitcoin/bitcoin/blob/29.x/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=83
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -listen=1
+        -noonion=1
+        -onlynet=ipv4
+        -proxy=10.64.0.1:1080
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -rpccookiefile=/var/lib/bitcoind/.cookie
+        -server=1
+        -txindex=1
+  bitcoin-core-over-tor:
+    container_name: bitcoin-core-over-tor
+    depends_on:
+      tor:
+        condition: service_healthy
+    extends:
+      service: bitcoin-core
+    image: bitcoin-node-docker/bitcoin-core-over-tor:${BITCOIN_CORE_VERSION}
+    profiles: [bitcoin-core-over-tor]
+    # See https://github.com/bitcoin/bitcoin/blob/29.x/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=83
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -listen=1
+        -listenonion=1
+        -onion=172.18.0.2:9050
+        -onlynet=onion
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -rpccookiefile=/var/lib/bitcoind/.cookie
+        -server=1
+        -torcontrol=172.18.0.2:9051
+        -txindex=1
+  bitcoin-knots:
+    build:
+      args:
+        - BITCOIN_KNOTS_MAJOR_VERSION=${BITCOIN_KNOTS_MAJOR_VERSION}
+        - BITCOIN_KNOTS_VERSION=${BITCOIN_KNOTS_VERSION}
+      context: ./services/bitcoin-knots
+    cap_drop:
+      - ALL
+    container_name: bitcoin-knots
+    healthcheck:
+      interval: 1s
+      retries: 30
+      start_period: 30s
+      test: [CMD, ls, /home/bitcoin/.bitcoin/.cookie]
+    logging:
+      driver: none
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 10m
+    volumes:
+      - /mnt/bitcoind:/home/bitcoin/.bitcoin
+      - bitcoind:/var/lib/bitcoind
+      - tor:/var/lib/tor:ro
+    networks:
+      private:
+        ipv4_address: 172.18.0.3
+    profiles: [base]
+    user: bitcoin
+    # See https://github.com/bitcoinknots/bitcoin/blob/29.x-knots/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=42
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -listen=1
+        -listenonion=1
+        -onion=172.18.0.2:9050
+        -onlynet=onion
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -rpccookiefile=/var/lib/bitcoind/.cookie
+        -server=1
+        -torcontrol=172.18.0.2:9051
+        -txindex=1
+  bitcoin-knots-over-mullvad:
+    container_name: bitcoin-knots-over-mullvad
+    extends:
+      service: bitcoin-knots
+    image: bitcoin-node-docker/bitcoin-knots-over-mullvad:${BITCOIN_KNOTS_VERSION}
+    profiles: [bitcoin-knots-over-mullvad]
+    # See https://github.com/bitcoinknots/bitcoin/blob/29.x-knots/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=42
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -listen=1
+        -noonion=1
+        -onlynet=ipv4
+        -proxy=10.64.0.1:1080
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -rpccookiefile=/var/lib/bitcoind/.cookie
+        -server=1
+        -txindex=1
+  bitcoin-knots-over-tor:
+    container_name: bitcoin-knots-over-tor
+    depends_on:
+      tor:
+        condition: service_healthy
+    extends:
+      service: bitcoin-knots
+    image: bitcoin-node-docker/bitcoin-knots-over-tor:${BITCOIN_KNOTS_VERSION}
+    profiles: [bitcoin-knots-over-tor]
+    # See https://github.com/bitcoinknots/bitcoin/blob/29.x-knots/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=42
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -listen=1
+        -listenonion=1
+        -onion=172.18.0.2:9050
+        -onlynet=onion
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -rpccookiefile=/var/lib/bitcoind/.cookie
+        -server=1
+        -torcontrol=172.18.0.2:9051
+        -txindex=1
+  electrs:
+    build:
+      args:
+        - ELECTRS_VERSION=${ELECTRS_VERSION}
+      context: ./services/electrs
+    cap_drop:
+      - ALL
+    container_name: electrs
+    image: bitcoin-node-docker/electrs:${ELECTRS_VERSION}
+    logging:
+      driver: none
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /mnt/electrs:/home/electrs/.electrs
+      - bitcoind:/var/lib/bitcoind
+    networks:
+      private:
+        ipv4_address: 172.18.0.4
+    ports:
+      - 127.0.0.1:50001:50001
+    user: electrs
+    command: >
+      sh -c '
+        while [ ! -f /var/lib/bitcoind/.cookie ]; do
+          echo "Waiting for .cookie file…"
+          sleep 2
+        done
+        exec electrs \
+          --cookie-file /var/lib/bitcoind/.cookie \
+          --electrum-rpc-addr 172.18.0.4:50001 \
+          --daemon-rpc-addr 172.18.0.3:8332 \
+          --daemon-p2p-addr 172.18.0.3:8333 \
+          --db-dir /home/electrs/.electrs \
+          --log-filters INFO
+      '
+
+networks:
+  default:
+    driver: bridge
+  private:
+    ipam:
+      config:
+        - gateway: 172.18.0.1
+          subnet: 172.18.0.0/24
+
+volumes:
+  bitcoind:
+  tor:
