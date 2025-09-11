@@ -79,7 +79,11 @@ $ cp .env.sample .env
 
 > Heads-up: replace `Docker` with external volume name.
 
+> Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
+
 ```console
+$ mullvad connect
+
 $ utilities/run.sh \
   --profile bitcoin-core-over-mullvad \
   --volume /Volumes/Docker
@@ -99,7 +103,11 @@ $ utilities/run.sh \
 
 > Heads-up: replace `Docker` with external volume name.
 
+> Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
+
 ```console
+$ mullvad connect
+
 $ utilities/run.sh \
   --profile bitcoin-knots-over-mullvad  \
   --volume /Volumes/Docker
