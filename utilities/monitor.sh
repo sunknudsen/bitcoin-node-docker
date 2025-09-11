@@ -81,11 +81,19 @@ OPTIONS:
                           (default: $default_interval)
   -h, --help              Show this help message
 
-DISPLAYS:
-  Memory pressure         Normal/Warning/Critical
-  Thermal pressure        Nominal/Fair/Serious/Critical
-  Disk usage              Percentage used
-
+DESCRIPTION:
+  This script monitors critical system health metrics on macOS:
+  1. Memory pressure - Shows system memory stress level
+  2. Thermal pressure - Shows system thermal stress level
+  3. Disk usage - Shows disk usage percentage
+  
+  Status indicators use color coding:
+  - Green: Normal/healthy levels
+  - Yellow: Warning/moderate levels
+  - Red: Critical/severe levels
+  
+  Watch mode continuously updates the output, useful for monitoring
+  system performance during intensive tasks or Docker operations.
 Exit watch mode using Ctrl+C.
 EOF
   exit 0
