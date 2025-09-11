@@ -70,7 +70,7 @@ $ colima --profile bitcoin-node start \
 > Heads-up: use `BITCOIND_DB_CACHE` to set how much memory to allocate to database cache.
 
 ```console
-cp .env.sample .env
+$ cp .env.sample .env
 ```
 
 ## Usage
