@@ -1,19 +1,21 @@
 # bitcoin-node-docker
 
-This [Docker Compose](https://docs.docker.com/compose/) template is used to run a Bitcoin full node on Apple silicon Mac running macOS storing blockchain data on external APFS (Encrypted) volume.
+This [Docker Compose](https://docs.docker.com/compose/) project is used to run a Bitcoin full node on Apple silicon Mac running macOS storing blockchain data on external APFS (Encrypted) volume.
 
-One can either use [Bitcoin Core](https://bitcoincore.org/) or [Bitcoin Knots](https://bitcoinknots.org/) and route traffic over Mullvad or Tor for additional privacy (Docker containers do not have direct Internet access, are isolated from macOS host and run read-only).
+One can either use [Bitcoin Core](https://bitcoincore.org/) or [Bitcoin Knots](https://bitcoinknots.org/) and route traffic over Mullvad or Tor for additional privacy (Docker containers do not have direct Internet access, are isolated from macOS host and run as read-only).
 
 An [Electrs](https://github.com/romanz/electrs) server is the only exposed service to which [Electrum](https://electrum.org/) can connect on macOS via `127.0.0.1:50001`.
 
 Using Mullvad is recommended for faster initial block download while using Tor is recommended when broadcasting transactions.
+
+If you wish to support this project, please star [repo](https://github.com/sunknudsen/bitcoin-node-docker) and consider a [donation](https://sunknudsen.com/donate).
 
 ## Setup
 
 ### Step 1: clone repo
 
 ```console
-git clone git@github.com:sunknudsen/bitcoin-node-docker.git
+$ git clone git@github.com:sunknudsen/bitcoin-node-docker.git
 ```
 
 ### Step 2: install [Homebrew](https://brew.sh/)
@@ -44,19 +46,9 @@ $ mkdir -p $HOME/.docker
 $ cp config.json.sample $HOME/.docker/config.json
 ```
 
-### Step 6: create folders on external volume
+### Step 6: configure [Colima](https://github.com/abiosoft/colima)
 
-> Heads-up: replace `Docker` with external volume name.
-
-> Heads-up: using APFS (Encrypted) volume is recommended.
-
-```console
-$ mkdir -p /Volumes/Docker/{bitcoind,electrs}
-```
-
-### Step 7: configure [Colima](https://github.com/abiosoft/colima)
-
-> Heads-up: replace `Docker` with external volume name.
+> Heads-up: replace `Docker` with external volume name and adjust `cpu` and `memory` if hardware can handle heavier workloads (these defaults are optimized for Apple silicon MacBook Air computers with 8GB of memory and passive cooling).
 
 ```console
 $ export COLIMA_HOME=/Volumes/Docker
@@ -65,16 +57,15 @@ $ mkdir -p ${COLIMA_HOME}/bitcoin-node
 
 $ cp colima.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
 
-$ colima start \
-  --profile bitcoin-node \
+$ colima --profile bitcoin-node start \
   --cpu 2 \
   --disk 2048 \
   --memory 4
 ```
 
-### Step 8: configure `.env`
+### Step 7: configure `.env`
 
-> Heads-up: use `BITCOIND_DB_CACHE="2048"` to set how much memory to allocate to database cache.
+> Heads-up: use `BITCOIND_DB_CACHE` to set how much memory to allocate to database cache.
 
 ```console
 cp .env.sample .env
@@ -84,56 +75,48 @@ cp .env.sample .env
 
 ### Run Bitcoin Core and route traffic over Mullvad
 
-Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
+> Heads-up: replace `Docker` with external volume name.
 
 ```console
-$ export COLIMA_HOME=/Volumes/Docker
-
-$ cp colima-mullvad.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
-
-$ colima start --profile bitcoin-node
-
-$ docker compose --profile bitcoin-core-over-mullvad up
+$ utilities/run.sh \
+  --profile bitcoin-core-over-mullvad \
+  --volume /Volumes/Docker
 ```
 
 ### Run Bitcoin Core and route traffic over Tor
 
-Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
+> Heads-up: replace `Docker` with external volume name.
 
 ```console
-$ export COLIMA_HOME=/Volumes/Docker
-
-$ cp colima-tor.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
-
-$ colima start --profile bitcoin-node
-
-$ docker compose --profile bitcoin-core-over-tor up
+$ utilities/run.sh \
+  --profile bitcoin-core-over-tor  \
+  --volume /Volumes/Docker
 ```
 
 ### Run Bitcoin Knots and route traffic over Mullvad
 
-Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
+> Heads-up: replace `Docker` with external volume name.
 
 ```console
-$ export COLIMA_HOME=/Volumes/Docker
-
-$ cp colima-mullvad.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
-
-$ colima start --profile bitcoin-node
-
-$ docker compose --profile bitcoin-knots-over-mullvad up
+$ utilities/run.sh \
+  --profile bitcoin-knots-over-mullvad  \
+  --volume /Volumes/Docker
 ```
 
 ### Run Bitcoin Knots and route traffic over Tor
 
-Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
+> Heads-up: replace `Docker` with external volume name.
 
 ```console
-$ export COLIMA_HOME=/Volumes/Docker
+$ utilities/run.sh \
+  --profile bitcoin-knots-over-tor  \
+  --volume /Volumes/Docker
+```
 
-$ cp colima-tor.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
+### Run Electrum
 
-$ colima start --profile bitcoin-node
+> Heads-up: requires Electrum app.
 
-$ docker compose --profile bitcoin-knots-over-tor up
+```console
+$ electrum/run.sh
 ```
