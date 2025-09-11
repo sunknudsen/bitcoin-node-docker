@@ -82,13 +82,13 @@ if ! mount | grep -q "on $COLIMA_HOME"; then
   exit 1
 fi
 
+colima --profile bitcoin-node stop
+
 if [[ "$profile" == *"mullvad"* ]]; then
   sed -i '' 's/ip daddr 172\.18\.0\.2 tcp dport {9050,9051}/ip daddr 10.64.0.1 tcp dport 1080/' "${COLIMA_HOME}/bitcoin-node/colima.yaml"
 elif [[ "$profile" == *"tor"* ]]; then
   sed -i '' 's/ip daddr 10\.64\.0\.1 tcp dport 1080/ip daddr 172.18.0.2 tcp dport {9050,9051}/' "${COLIMA_HOME}/bitcoin-node/colima.yaml"
 fi
-
-colima --profile bitcoin-node stop
 
 colima --profile bitcoin-node start
 
