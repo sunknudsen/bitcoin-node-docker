@@ -184,9 +184,9 @@ provision:
       nft add rule ip filter BITCOIN_NODE ip saddr 172.18.0.3 counter drop
       nft add rule ip filter BITCOIN_NODE ip saddr 172.18.0.4 ip daddr 172.18.0.3 tcp dport {8332,8333} counter accept
       nft add rule ip filter BITCOIN_NODE ip saddr 172.18.0.4 counter drop
-      # nft add chain ip6 filter BITCOIN_NODE
-      # nft insert rule ip6 filter DOCKER-USER jump BITCOIN_NODE
-      # nft add rule ip6 filter BITCOIN_NODE ip6 saddr ::/0 counter drop
+      nft add chain ip6 filter BITCOIN_NODE
+      nft insert rule ip6 filter DOCKER-USER jump BITCOIN_NODE
+      nft add rule ip6 filter BITCOIN_NODE counter drop
 
 # Modify ~/.ssh/config automatically to include a SSH config for the virtual machine.
 # SSH config will still be generated in $COLIMA_HOME/ssh_config regardless.
