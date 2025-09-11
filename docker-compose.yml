@@ -1,4 +1,4 @@
-# https://docs.docker.com/reference/compose-file/services/
+# See https://docs.docker.com/reference/compose-file/services/
 services:
   tor:
     build:
