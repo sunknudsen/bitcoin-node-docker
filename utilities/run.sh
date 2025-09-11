@@ -27,11 +27,18 @@ OPTIONS:
 DESCRIPTION:
   This script starts a Bitcoin node by:
   1. Checking if the specified volume is mounted
-  2. Starting Colima with bitcoin-node profile
-  3. Running Docker Compose with the specified profile
-  4. Stopping Colima and ejecting the volume when done
+  2. Provisioning Colima firewall rules based on the specified profile
+  3. Starting Colima using bitcoin-node profile
+  4. Running Docker Compose using the specified profile
+  5. Stopping Colima and ejecting the volume when done
 
-The script will keep the system awake during operation using caffeinate.
+  The script will keep the system awake during operation using caffeinate.
+  
+  Available profiles:
+  - bitcoin-core-over-mullvad: Bitcoin Core over Mullvad VPN
+  - bitcoin-core-over-tor: Bitcoin Core over Tor network
+  - bitcoin-knots-over-mullvad: Bitcoin Knots over Mullvad VPN  
+  - bitcoin-knots-over-tor: Bitcoin Knots over Tor network
 EOF
   exit 0
 fi
@@ -76,9 +83,9 @@ if ! mount | grep -q "on $COLIMA_HOME"; then
 fi
 
 if [[ "$profile" == *"mullvad"* ]]; then
-  cp "$project_directory/colima-mullvad.yaml.sample" "${COLIMA_HOME}/bitcoin-node/colima.yaml"
+  sed -i '' 's/ip daddr 172\.18\.0\.2 tcp dport {9050,9051}/ip daddr 10.64.0.1 tcp dport 1080/' "${COLIMA_HOME}/bitcoin-node/colima.yaml"
 elif [[ "$profile" == *"tor"* ]]; then
-  cp "$project_directory/colima-tor.yaml.sample" "${COLIMA_HOME}/bitcoin-node/colima.yaml"
+  sed -i '' 's/ip daddr 10\.64\.0\.1 tcp dport 1080/ip daddr 172.18.0.2 tcp dport {9050,9051}/' "${COLIMA_HOME}/bitcoin-node/colima.yaml"
 fi
 
 colima --profile bitcoin-node stop

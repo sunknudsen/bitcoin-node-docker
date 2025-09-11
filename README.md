@@ -63,7 +63,7 @@ $ export COLIMA_HOME=/Volumes/Docker
 
 $ mkdir -p ${COLIMA_HOME}/bitcoin-node
 
-$ cp colima-mullvad.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
+$ cp colima.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
 
 $ colima start \
   --profile bitcoin-node \
