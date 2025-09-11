@@ -36,11 +36,6 @@ services:
     cap_drop:
       - ALL
     container_name: bitcoin-core
-    healthcheck:
-      interval: 1s
-      retries: 30
-      start_period: 30s
-      test: [CMD, ls, /home/bitcoin/.bitcoin/.cookie]
     logging:
       driver: none
     read_only: true
@@ -49,7 +44,6 @@ services:
       - no-new-privileges:true
     stop_grace_period: 10m
     volumes:
-      - /mnt/bitcoind:/home/bitcoin/.bitcoin
       - bitcoind:/var/lib/bitcoind
       - tor:/var/lib/tor:ro
     networks:
@@ -63,6 +57,7 @@ services:
         -assumevalid=0
         -bind=172.18.0.3:8333
         -datacarriersize=83
+        -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
         -listen=1
@@ -72,7 +67,6 @@ services:
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
-        -rpccookiefile=/var/lib/bitcoind/.cookie
         -server=1
         -torcontrol=172.18.0.2:9051
         -txindex=1
@@ -88,6 +82,7 @@ services:
         -assumevalid=0
         -bind=172.18.0.3:8333
         -datacarriersize=83
+        -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
         -listen=1
@@ -97,7 +92,6 @@ services:
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
-        -rpccookiefile=/var/lib/bitcoind/.cookie
         -server=1
         -txindex=1
   bitcoin-core-over-tor:
@@ -115,6 +109,7 @@ services:
         -assumevalid=0
         -bind=172.18.0.3:8333
         -datacarriersize=83
+        -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
         -listen=1
@@ -124,7 +119,6 @@ services:
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
-        -rpccookiefile=/var/lib/bitcoind/.cookie
         -server=1
         -torcontrol=172.18.0.2:9051
         -txindex=1
@@ -137,11 +131,6 @@ services:
     cap_drop:
       - ALL
     container_name: bitcoin-knots
-    healthcheck:
-      interval: 1s
-      retries: 30
-      start_period: 30s
-      test: [CMD, ls, /home/bitcoin/.bitcoin/.cookie]
     logging:
       driver: none
     read_only: true
@@ -150,7 +139,6 @@ services:
       - no-new-privileges:true
     stop_grace_period: 10m
     volumes:
-      - /mnt/bitcoind:/home/bitcoin/.bitcoin
       - bitcoind:/var/lib/bitcoind
       - tor:/var/lib/tor:ro
     networks:
@@ -164,6 +152,7 @@ services:
         -assumevalid=0
         -bind=172.18.0.3:8333
         -datacarriersize=42
+        -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
         -listen=1
@@ -173,7 +162,6 @@ services:
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
-        -rpccookiefile=/var/lib/bitcoind/.cookie
         -server=1
         -torcontrol=172.18.0.2:9051
         -txindex=1
@@ -189,6 +177,7 @@ services:
         -assumevalid=0
         -bind=172.18.0.3:8333
         -datacarriersize=42
+        -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
         -listen=1
@@ -198,7 +187,6 @@ services:
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
-        -rpccookiefile=/var/lib/bitcoind/.cookie
         -server=1
         -txindex=1
   bitcoin-knots-over-tor:
@@ -216,6 +204,7 @@ services:
         -assumevalid=0
         -bind=172.18.0.3:8333
         -datacarriersize=42
+        -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
         -listen=1
@@ -225,7 +214,6 @@ services:
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
-        -rpccookiefile=/var/lib/bitcoind/.cookie
         -server=1
         -torcontrol=172.18.0.2:9051
         -txindex=1
@@ -245,8 +233,8 @@ services:
     security_opt:
       - no-new-privileges:true
     volumes:
-      - /mnt/electrs:/home/electrs/.electrs
-      - bitcoind:/var/lib/bitcoind
+      - bitcoind:/var/lib/bitcoind:ro
+      - electrs:/var/lib/electrs
     networks:
       private:
         ipv4_address: 172.18.0.4
@@ -264,7 +252,7 @@ services:
           --electrum-rpc-addr 172.18.0.4:50001 \
           --daemon-rpc-addr 172.18.0.3:8332 \
           --daemon-p2p-addr 172.18.0.3:8333 \
-          --db-dir /home/electrs/.electrs \
+          --db-dir /var/lib/electrs \
           --log-filters INFO
       '
 
@@ -279,4 +267,5 @@ networks:
 
 volumes:
   bitcoind:
+  electrs:
   tor:

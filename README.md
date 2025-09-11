@@ -59,19 +59,17 @@ $ mkdir -p /Volumes/Docker/{bitcoind,electrs}
 > Heads-up: replace `Docker` with external volume name.
 
 ```console
-$ mkdir -p $HOME/.colima/bitcoin-node
+$ export COLIMA_HOME=/Volumes/Docker
 
-$ cp colima-tor.yaml.sample $HOME/.colima/bitcoin-node/colima.yaml
+$ mkdir -p ${COLIMA_HOME}/bitcoin-node
+
+$ cp colima-mullvad.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
 
 $ colima start \
   --profile bitcoin-node \
   --cpu 2 \
-  --disk 100 \
-  --memory 4 \
-  --mount /Volumes/Docker/bitcoind:/mnt/bitcoind:w \
-  --mount /Volumes/Docker/electrs:/mnt/electrs:w \
-  --mount-type virtiofs \
-  --vm-type vz
+  --disk 2048 \
+  --memory 4
 ```
 
 ### Step 8: configure `.env`
@@ -89,7 +87,9 @@ cp .env.sample .env
 Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
 
 ```console
-$ cp colima-mullvad.yaml.sample $HOME/.colima/bitcoin-node/colima.yaml
+$ export COLIMA_HOME=/Volumes/Docker
+
+$ cp colima-mullvad.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
 
 $ colima start --profile bitcoin-node
 
@@ -101,7 +101,9 @@ $ docker compose --profile bitcoin-core-over-mullvad up
 Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
 
 ```console
-$ cp colima-tor.yaml.sample $HOME/.colima/bitcoin-node/colima.yaml
+$ export COLIMA_HOME=/Volumes/Docker
+
+$ cp colima-tor.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
 
 $ colima start --profile bitcoin-node
 
@@ -113,7 +115,9 @@ $ docker compose --profile bitcoin-core-over-tor up
 Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
 
 ```console
-$ cp colima-mullvad.yaml.sample $HOME/.colima/bitcoin-node/colima.yaml
+$ export COLIMA_HOME=/Volumes/Docker
+
+$ cp colima-mullvad.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
 
 $ colima start --profile bitcoin-node
 
@@ -125,7 +129,9 @@ $ docker compose --profile bitcoin-knots-over-mullvad up
 Make sure colima is not running using `colima stop --profile bitcoin-node` and connect external volume. 
 
 ```console
-$ cp colima-tor.yaml.sample $HOME/.colima/bitcoin-node/colima.yaml
+$ export COLIMA_HOME=/Volumes/Docker
+
+$ cp colima-tor.yaml.sample ${COLIMA_HOME}/bitcoin-node/colima.yaml
 
 $ colima start --profile bitcoin-node
 

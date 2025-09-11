@@ -11,3 +11,5 @@ FROM debian:bookworm-slim
 COPY --from=build electrs/target/release/electrs /usr/local/bin/electrs
 RUN addgroup electrs \
   && adduser --disabled-password --gecos "" --ingroup electrs electrs
+RUN mkdir -p /var/lib/electrs \
+  && chown electrs:electrs /var/lib/electrs

@@ -6,7 +6,7 @@ cpu: 2
 # NOTE: value can only be increased after virtual machine has been created.
 #
 # Default: 100
-disk: 100
+disk: 2048
 
 # Size of the memory in GiB to be allocated to the virtual machine.
 # Default: 2
@@ -212,13 +212,7 @@ sshPort: 0
 #
 # Colima default behaviour: $HOME and /tmp/colima are mounted as writable.
 # Default: []
-mounts:
-  - location: /Volumes/Docker/bitcoind
-    mountPoint: /mnt/bitcoind
-    writable: true
-  - location: /Volumes/Docker/electrs
-    mountPoint: /mnt/electrs
-    writable: true
+mounts: []
 
 # Specify a custom disk image for the virtual machine.
 # When not specified, Colima downloads an appropriate disk image from Github at
