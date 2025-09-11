@@ -125,7 +125,7 @@ $ utilities/run.sh \
 
 ### Run Electrum
 
-> Heads-up: requires Electrum app.
+> Heads-up: requires Electrum [app](https://electrum.org/#download).
 
 ```console
 $ electrum/run.sh
