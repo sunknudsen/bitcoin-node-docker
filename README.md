@@ -15,7 +15,7 @@ If you wish to support this project, please star [repo](https://github.com/sunkn
 ### Step 1: clone repo
 
 ```console
-$ git clone git@github.com:sunknudsen/bitcoin-node-docker.git
+$ git clone https://github.com/sunknudsen/bitcoin-node-docker.git
 ```
 
 ### Step 2: install [Homebrew](https://brew.sh/)
