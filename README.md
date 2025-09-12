@@ -31,6 +31,8 @@ If thermal pressure isn’t nominal (green), using a stand and a fan is recommen
 
 ### Step 1: clone repo
 
+> Heads-up: running `git` will trigger “Command Line Tools” install unless already installed.
+
 ```console
 $ git clone https://github.com/sunknudsen/bitcoin-node-docker.git
 
