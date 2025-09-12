@@ -18,6 +18,7 @@ If you wish to support this project, please star [repo](https://github.com/sunkn
 If you don’t have a spare enclosure and 2TB NVMe disk, here are two great options:
 
 **Budget option:** [sharge Disk Plus](https://sharge.com/products/disk-plus) + [2TB WD_BLACK SN7100 M.2 2280 NVMe](https://shop.sandisk.com/en-us/products/ssd/internal-ssd/wd-black-sn7100-nvme-internal-ssd?sku=WDS200T4X0E-00CJA0)
+
 **Performance option:** [OWC Express 1M2](https://www.owc.com/solutions/express-1m2) + [2TB SAMSUNG 990 PRO M.2 2280 NVMe](https://www.samsung.com/us/computing/memory-storage/solid-state-drives/990-pro-pcie-4-0-nvme-ssd-2tb-mz-v9p2t0b-am/)
 
 Both of these options can usually be purchased on Amazon (preferrably shipped and sold by Amazon for warranty).
