@@ -50,7 +50,7 @@ $ cp config.json.sample $HOME/.docker/config.json
 
 ### Step 6: configure [Colima](https://github.com/abiosoft/colima)
 
-> Heads-up: replace `Docker` with external volume name and adjust `cpu` and `memory` if hardware can handle heavier workloads (these defaults are optimized for Apple silicon MacBook Air computers with 8GB of memory and passive cooling).
+> Heads-up: replace `Docker` with external volume name and adjust `cpu` and `memory` if hardware can handle heavier workloads (defaults are optimized for Apple silicon MacBook Air computers with 8GB of memory and passive cooling).
 
 ```console
 $ export COLIMA_HOME=/Volumes/Docker
@@ -80,6 +80,8 @@ $ cp .env.sample .env
 > Heads-up: replace `Docker` with external volume name.
 
 > Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
+
+> Heads-up: initial block download is expected to take about 48 hours using defaults and fast Internet connection.
 
 ```console
 $ mullvad connect
