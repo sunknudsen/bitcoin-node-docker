@@ -60,8 +60,10 @@ services:
         -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
+        -discover=0
         -listen=1
         -listenonion=1
+        -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
         -prune=0
@@ -85,7 +87,9 @@ services:
         -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
+        -discover=0
         -listen=1
+        -natpmp=0
         -noonion=1
         -onlynet=ipv4
         -proxy=10.64.0.1:1080
@@ -112,8 +116,10 @@ services:
         -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
+        -discover=0
         -listen=1
         -listenonion=1
+        -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
         -prune=0
@@ -155,8 +161,10 @@ services:
         -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
+        -discover=0
         -listen=1
         -listenonion=1
+        -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
         -prune=0
@@ -180,7 +188,9 @@ services:
         -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
+        -discover=0
         -listen=1
+        -natpmp=0
         -noonion=1
         -onlynet=ipv4
         -proxy=10.64.0.1:1080
@@ -207,8 +217,10 @@ services:
         -datadir=/var/lib/bitcoind
         -dbcache=${BITCOIND_DB_CACHE}
         -disablewallet=1
+        -discover=0
         -listen=1
         -listenonion=1
+        -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
         -prune=0
