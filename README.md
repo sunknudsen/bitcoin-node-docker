@@ -86,7 +86,9 @@ $ colima --profile bitcoin-node start \
 
 ### Step 7: configure `.env`
 
-> Heads-up: use `BITCOIND_DB_CACHE` to set how much memory to allocate to database cache.
+> Heads-up: use `BITCOIND_DB_CACHE` to set database cache memory allocation (defaults to `2048`).
+
+> Heads-up: use `BITCOIND_MAX_UPLOAD_TARGET` to set daily upload target (defaults to unlimited, use `500M` for a 500MB per day soft target).
 
 ```console
 $ cp .env.sample .env

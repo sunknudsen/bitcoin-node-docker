@@ -63,6 +63,7 @@ services:
         -discover=0
         -listen=1
         -listenonion=1
+        -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
@@ -119,6 +120,7 @@ services:
         -discover=0
         -listen=1
         -listenonion=1
+        -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
@@ -164,6 +166,7 @@ services:
         -discover=0
         -listen=1
         -listenonion=1
+        -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
@@ -220,6 +223,7 @@ services:
         -discover=0
         -listen=1
         -listenonion=1
+        -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
