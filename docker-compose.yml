@@ -24,7 +24,11 @@ services:
       default: {}
       private:
         ipv4_address: 172.18.0.2
-    profiles: [bitcoin-core-over-tor, bitcoin-knots-over-tor]
+    profiles:
+      - bitcoin-core-over-tor
+      - bitcoin-core-over-tor-outbound-only
+      - bitcoin-knots-over-tor
+      - bitcoin-knots-over-tor-outbound-only
     user: tor
     command: >
       tor
@@ -49,7 +53,8 @@ services:
     networks:
       private:
         ipv4_address: 172.18.0.3
-    profiles: [base]
+    profiles:
+      - base
     user: bitcoin
     # See https://github.com/bitcoin/bitcoin/blob/29.x/share/examples/bitcoin.conf
     command: >
@@ -78,7 +83,8 @@ services:
     extends:
       service: bitcoin-core
     image: bitcoin-node-docker/bitcoin-core-over-mullvad:${BITCOIN_CORE_VERSION}
-    profiles: [bitcoin-core-over-mullvad]
+    profiles:
+      - bitcoin-core-over-mullvad
     # See https://github.com/bitcoin/bitcoin/blob/29.x/share/examples/bitcoin.conf
     command: >
       bitcoind
@@ -107,7 +113,8 @@ services:
     extends:
       service: bitcoin-core
     image: bitcoin-node-docker/bitcoin-core-over-tor:${BITCOIN_CORE_VERSION}
-    profiles: [bitcoin-core-over-tor]
+    profiles:
+      - bitcoin-core-over-tor
     # See https://github.com/bitcoin/bitcoin/blob/29.x/share/examples/bitcoin.conf
     command: >
       bitcoind
@@ -129,6 +136,36 @@ services:
         -rpcbind=172.18.0.3:8332
         -server=1
         -torcontrol=172.18.0.2:9051
+        -txindex=1
+  bitcoin-core-over-tor-outbound-only:
+    container_name: bitcoin-core-over-tor-outbound-only
+    depends_on:
+      tor:
+        condition: service_healthy
+    extends:
+      service: bitcoin-core
+    image: bitcoin-node-docker/bitcoin-core-over-tor-outbound-only:${BITCOIN_CORE_VERSION}
+    profiles:
+      - bitcoin-core-over-tor-outbound-only
+    # See https://github.com/bitcoin/bitcoin/blob/29.x/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=83
+        -datadir=/var/lib/bitcoind
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -discover=0
+        -listen=1
+        -listenonion=0
+        -natpmp=0
+        -onion=172.18.0.2:9050
+        -onlynet=onion
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -server=1
         -txindex=1
   bitcoin-knots:
     build:
@@ -152,7 +189,8 @@ services:
     networks:
       private:
         ipv4_address: 172.18.0.3
-    profiles: [base]
+    profiles:
+      - base
     user: bitcoin
     # See https://github.com/bitcoinknots/bitcoin/blob/29.x-knots/share/examples/bitcoin.conf
     command: >
@@ -181,7 +219,8 @@ services:
     extends:
       service: bitcoin-knots
     image: bitcoin-node-docker/bitcoin-knots-over-mullvad:${BITCOIN_KNOTS_VERSION}
-    profiles: [bitcoin-knots-over-mullvad]
+    profiles:
+      - bitcoin-knots-over-mullvad
     # See https://github.com/bitcoinknots/bitcoin/blob/29.x-knots/share/examples/bitcoin.conf
     command: >
       bitcoind
@@ -210,7 +249,8 @@ services:
     extends:
       service: bitcoin-knots
     image: bitcoin-node-docker/bitcoin-knots-over-tor:${BITCOIN_KNOTS_VERSION}
-    profiles: [bitcoin-knots-over-tor]
+    profiles:
+      - bitcoin-knots-over-tor
     # See https://github.com/bitcoinknots/bitcoin/blob/29.x-knots/share/examples/bitcoin.conf
     command: >
       bitcoind
@@ -232,6 +272,36 @@ services:
         -rpcbind=172.18.0.3:8332
         -server=1
         -torcontrol=172.18.0.2:9051
+        -txindex=1
+  bitcoin-knots-over-tor-outbound-only:
+    container_name: bitcoin-knots-over-tor-outbound-only
+    depends_on:
+      tor:
+        condition: service_healthy
+    extends:
+      service: bitcoin-knots
+    image: bitcoin-node-docker/bitcoin-knots-over-tor-outbound-only:${BITCOIN_KNOTS_VERSION}
+    profiles:
+      - bitcoin-knots-over-tor-outbound-only
+    # See https://github.com/bitcoinknots/bitcoin/blob/29.x-knots/share/examples/bitcoin.conf
+    command: >
+      bitcoind
+        -assumevalid=0
+        -bind=172.18.0.3:8333
+        -datacarriersize=42
+        -datadir=/var/lib/bitcoind
+        -dbcache=${BITCOIND_DB_CACHE}
+        -disablewallet=1
+        -discover=0
+        -listen=1
+        -listenonion=0
+        -natpmp=0
+        -onion=172.18.0.2:9050
+        -onlynet=onion
+        -prune=0
+        -rpcallowip=172.18.0.0/24
+        -rpcbind=172.18.0.3:8332
+        -server=1
         -txindex=1
   electrs:
     build:

@@ -37,8 +37,10 @@ DESCRIPTION:
   Available profiles:
   - bitcoin-core-over-mullvad: Bitcoin Core over Mullvad VPN
   - bitcoin-core-over-tor: Bitcoin Core over Tor network
+  - bitcoin-core-over-tor-outbound-only: Bitcoin Core over Tor network (outbound-only)
   - bitcoin-knots-over-mullvad: Bitcoin Knots over Mullvad VPN  
   - bitcoin-knots-over-tor: Bitcoin Knots over Tor network
+  - bitcoin-knots-over-tor-outbound-only: Bitcoin Knots over Tor network (outbound-only)
 EOF
   exit 0
 fi

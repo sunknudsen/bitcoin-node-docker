@@ -98,11 +98,11 @@ $ cp .env.sample .env
 
 ### Run Bitcoin Core and route traffic over Mullvad
 
-> Heads-up: replace `Docker` with external volume name.
+> Heads-up: replace `Docker` with external volume name (if applicable).
 
 > Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
 
-> Heads-up: initial block download is expected to take about 48 hours using defaults and fast Internet connection.
+> Heads-up: initial block download is expected to take about 48-72 hours using defaults on fast Internet connection.
 
 ```console
 $ mullvad connect
@@ -114,7 +114,7 @@ $ utilities/run.sh \
 
 ### Run Bitcoin Core and route traffic over Tor
 
-> Heads-up: replace `Docker` with external volume name.
+> Heads-up: replace `Docker` with external volume name (if applicable).
 
 ```console
 $ utilities/run.sh \
@@ -122,11 +122,26 @@ $ utilities/run.sh \
   --volume /Volumes/Docker
 ```
 
+
+### Run Bitcoin Core and route traffic over Tor (outbound-only)
+
+> Heads-up: replace `Docker` with external volume name (if applicable).
+
+> Heads-up: use this profile when running node while tethering over cellular networks (**warning:** block download can still use significant bandwidth so syncing node beforehand is recommended).
+
+```console
+$ utilities/run.sh \
+  --profile bitcoin-core-over-tor-outbound-only  \
+  --volume /Volumes/Docker
+```
+
 ### Run Bitcoin Knots and route traffic over Mullvad
 
-> Heads-up: replace `Docker` with external volume name.
+> Heads-up: replace `Docker` with external volume name (if applicable).
 
 > Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
+
+> Heads-up: initial block download is expected to take about 48-72 hours using defaults on fast Internet connection.
 
 ```console
 $ mullvad connect
@@ -138,11 +153,23 @@ $ utilities/run.sh \
 
 ### Run Bitcoin Knots and route traffic over Tor
 
-> Heads-up: replace `Docker` with external volume name.
+> Heads-up: replace `Docker` with external volume name (if applicable).
 
 ```console
 $ utilities/run.sh \
   --profile bitcoin-knots-over-tor  \
+  --volume /Volumes/Docker
+```
+
+### Run Bitcoin Knots and route traffic over Tor (outbound-only)
+
+> Heads-up: replace `Docker` with external volume name (if applicable).
+
+> Heads-up: use this profile when running node while tethering over cellular networks (**warning:** block download can still use significant bandwidth so syncing node beforehand is recommended).
+
+```console
+$ utilities/run.sh \
+  --profile bitcoin-knots-over-tor-outbound-only  \
   --volume /Volumes/Docker
 ```
 
