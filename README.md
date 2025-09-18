@@ -6,8 +6,6 @@ One can either use [Bitcoin Core](https://bitcoincore.org/) or [Bitcoin Knots](h
 
 An [Electrs](https://github.com/romanz/electrs) server is the only exposed service to which [Electrum](https://electrum.org/) can connect on macOS via `127.0.0.1:50001`.
 
-Using Mullvad is recommended for faster initial block download while using Tor is recommended when broadcasting transactions.
-
 If you wish to support this project, please star [repo](https://github.com/sunknudsen/bitcoin-node-docker) and consider a [donation](https://sunknudsen.com/donate).
 
 ## Required hardware
@@ -96,13 +94,17 @@ $ cp .env.sample .env
 
 ## Usage
 
+Using Mullvad profile is recommended during initial block download to considerably speed things up (initial block download is expected to take about 48-72 hours using defaults on fast Internet connection and using wired Ethernet connection is recommended).
+
+Using Tor outbound-only profile is recommended when running node on the go over cellular networks (**warning:** block download can still use considerable bandwidth so syncing node beforehand is recommended).
+
+**Using Tor profile is recommended after initial block download has completed.**
+
 ### Run Bitcoin Core and route traffic over Mullvad
 
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
 > Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
-
-> Heads-up: initial block download is expected to take about 48-72 hours using defaults on fast Internet connection.
 
 ```console
 $ mullvad connect
@@ -127,8 +129,6 @@ $ utilities/run.sh \
 
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
-> Heads-up: use this profile when running node while tethering over cellular networks (**warning:** block download can still use significant bandwidth so syncing node beforehand is recommended).
-
 ```console
 $ utilities/run.sh \
   --profile bitcoin-core-over-tor-outbound-only  \
@@ -140,8 +140,6 @@ $ utilities/run.sh \
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
 > Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
-
-> Heads-up: initial block download is expected to take about 48-72 hours using defaults on fast Internet connection.
 
 ```console
 $ mullvad connect
@@ -164,8 +162,6 @@ $ utilities/run.sh \
 ### Run Bitcoin Knots and route traffic over Tor (outbound-only)
 
 > Heads-up: replace `Docker` with external volume name (if applicable).
-
-> Heads-up: use this profile when running node while tethering over cellular networks (**warning:** block download can still use significant bandwidth so syncing node beforehand is recommended).
 
 ```console
 $ utilities/run.sh \
