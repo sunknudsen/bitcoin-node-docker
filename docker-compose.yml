@@ -72,6 +72,7 @@ services:
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
@@ -100,6 +101,7 @@ services:
         -noonion=1
         -onlynet=ipv4
         -proxy=10.64.0.1:1080
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
@@ -131,6 +133,7 @@ services:
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
@@ -162,6 +165,7 @@ services:
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
@@ -208,6 +212,7 @@ services:
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
@@ -236,6 +241,7 @@ services:
         -noonion=1
         -onlynet=ipv4
         -proxy=10.64.0.1:1080
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
@@ -267,6 +273,7 @@ services:
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332
@@ -298,6 +305,7 @@ services:
         -natpmp=0
         -onion=172.18.0.2:9050
         -onlynet=onion
+        -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
         -prune=0
         -rpcallowip=172.18.0.0/24
         -rpcbind=172.18.0.3:8332

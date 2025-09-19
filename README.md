@@ -86,11 +86,21 @@ $ colima --profile bitcoin-node start \
 
 > Heads-up: use `BITCOIND_DB_CACHE` to set database cache memory allocation (defaults to `2048`).
 
-> Heads-up: use `BITCOIND_MAX_UPLOAD_TARGET` to set daily upload target (defaults to unlimited, use `500M` for a 500MB per day soft target).
+> Heads-up: use `BITCOIND_MAX_UPLOAD_TARGET` to set daily upload target (defaults to unlimited, use `500M` for a 500MB per day upload target).
+
+> Heads-up: use `BITCOIND_PERSIST_MEMPOOL` to set mempool persistence (defaults to non-persistent, use `1` to enable mempool persistence if node runs 24/7[¹](#fee-estimates)).
 
 ```console
 $ cp .env.sample .env
 ```
+
+## Caveats
+
+### Fee estimates
+
+When Bitcoin node does not run 24/7 or mempool persistence is disabled and node restarts, mempool is stale and, as a result, fee estimates are not consistent with network averages.
+
+Before broadcasting transactions, it is recommended to allow node to sync to tip, wait a few hours for mempool to calibrate and confirm fee estimates using public mempool explorer such as [https://mempool.space/](https://mempool.space/).
 
 ## Usage
 
