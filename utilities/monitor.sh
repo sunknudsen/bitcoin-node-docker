@@ -92,8 +92,8 @@ DESCRIPTION:
   - Yellow: Warning/moderate levels
   - Red: Critical/severe levels
   
-  Watch mode continuously updates the output, useful for monitoring
-  system performance during intensive tasks or Docker operations.
+  Watch mode continuously updates output, useful for monitoring system
+  performance during intensive tasks or Docker operations.
 Exit watch mode using Ctrl+C.
 EOF
   exit 0

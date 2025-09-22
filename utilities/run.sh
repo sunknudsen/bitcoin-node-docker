@@ -26,13 +26,13 @@ OPTIONS:
 
 DESCRIPTION:
   This script starts a Bitcoin node by:
-  1. Checking if the specified volume is mounted
-  2. Provisioning Colima firewall rules based on the specified profile
+  1. Checking if specified volume is mounted
+  2. Provisioning Colima firewall rules based on specified profile
   3. Starting Colima using bitcoin-node profile
-  4. Running Docker Compose using the specified profile
-  5. Stopping Colima and ejecting the volume when done
+  4. Running Docker Compose using specified profile
+  5. Stopping Colima and ejecting volume when done
 
-  The script will keep the system awake during operation using caffeinate.
+  The script will keep system awake using caffeinate.
   
   Available profiles:
   - bitcoin-core-over-mullvad: Bitcoin Core over Mullvad VPN

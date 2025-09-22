@@ -110,6 +110,8 @@ Using Tor outbound-only profile is recommended when running node on the go over 
 
 **Using Tor profile is recommended after initial block download has completed.**
 
+**Use <kbd>Ctrl+C</kbd> to stop node and eject volume.**
+
 ### Run Bitcoin Core and route traffic over Mullvad
 
 > Heads-up: replace `Docker` with external volume name (if applicable).
@@ -182,6 +184,8 @@ $ utilities/run.sh \
 ### Run Electrum
 
 > Heads-up: requires Electrum [app](https://electrum.org/#download).
+
+> Heads-up: run script used to start Electrum without data persistence using RAM disk.
 
 ```console
 $ electrum/run.sh

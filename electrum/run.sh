@@ -4,22 +4,18 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   cat << EOF
 Usage: electrum.sh [OPTIONS]
 
-Run Electrum wallet with a temporary RAM disk for enhanced privacy.
+Start Electrum without data persistence using RAM disk.
 
 OPTIONS:
   -h, --help  Show this help message
 
 DESCRIPTION:
-  This script runs Electrum wallet with the following security features:
-  1. Creates a 100MB RAM disk for temporary storage
-  2. Partitions the RAM disk with APFS filesystem
-  3. Runs Electrum connected to local server (127.0.0.1:50001)
-  4. Uses oneserver mode for privacy
-  5. Stores wallet on the RAM disk (/Volumes/tmp/holding)
-  6. Automatically ejects the RAM disk when done
-
-The RAM disk ensures that wallet data is never written to persistent storage,
-providing enhanced privacy and security for your Bitcoin transactions.
+  This script starts Electrum without data persistence by:
+  1. Creating a 100MB RAM disk
+  2. Partitioning RAM disk using APFS filesystem
+  3. Starting Electrum using oneserver to only connect to local Bitcoin node
+  4. Storing wallet on RAM disk (/Volumes/tmp/holding)
+  5. Automatically ejecting RAM disk when done
 EOF
   exit 0
 fi
