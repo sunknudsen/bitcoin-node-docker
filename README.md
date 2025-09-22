@@ -190,3 +190,23 @@ $ utilities/run.sh \
 ```console
 $ electrum/run.sh
 ```
+
+## Extras
+
+### Create aliases
+
+> Heads-up: replace `$HOME/bitcoin-node-docker` with path to bitcoin-node-docker folder, `bitcoin-knots-over-tor` with preferred profile and `Docker` with external volume name (if applicable).
+
+Once aliases have been created, one can run `bitcoin-node` to start Bitcoin node and `electrum` to start Electrum without data persistence.
+
+**Use <kbd>Ctrl+C</kbd> to stop Bitcoin node and eject volume.**
+
+```console
+$ cat << 'EOF' >> $HOME/.zshrc
+# Set bitcoin-node-docker aliases
+alias bitcoin-node="$HOME/bitcoin-node-docker/utilities/run.sh --profile bitcoin-knots-over-tor --volume /Volumes/Docker"
+alias electrum="$HOME/Code/sunknudsen/bitcoin-node-docker/electrum/run.sh"
+EOF
+
+$ source $HOME/.zshrc
+```
