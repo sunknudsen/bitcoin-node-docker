@@ -2,6 +2,8 @@
 services:
   tor:
     build:
+      args:
+        - TOR_VERSION=${TOR_VERSION}
       context: ./services/tor
     cap_drop:
       - ALL
@@ -11,7 +13,7 @@ services:
       retries: 30
       start_period: 30s
       test: [CMD, ls, /var/lib/tor/control_auth_cookie]
-    image: bitcoin-node-docker/tor:latest
+    image: bitcoin-node-docker/tor:${TOR_VERSION}
     logging:
       driver: none
     read_only: true

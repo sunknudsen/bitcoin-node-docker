@@ -4,7 +4,7 @@ RUN apt-get update \
   && apt-get install --yes build-essential git libclang-dev \
   && git clone https://github.com/romanz/electrs.git \
   && cd electrs \
-  && git checkout ${ELECTRS_VERSION} \
+  && git checkout v${ELECTRS_VERSION} \
   && cargo build --locked --no-default-features --release
 
 FROM debian:bookworm-slim
