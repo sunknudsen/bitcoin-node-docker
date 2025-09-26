@@ -94,6 +94,36 @@ $ colima --profile bitcoin-node start \
 $ cp .env.sample .env
 ```
 
+## Update
+
+### Step 1: stop Bitcoin node using <kbd>Ctrl+C</kbd> (if running)
+
+### Step 2: update `.env`
+
+> Heads-up: major version updates (going from version 29 to 30 for example) may be [contentious](https://www.youtube.com/watch?v=FZ-nD9hSaeg), so it is advisable to research changes before upgrading (use `--dry-run` to display latest versions without updating .env).
+
+```console
+$ utilities/update-dotenv.sh
+```
+
+### Step 3: run Bitcoin node
+
+> Heads-up: replace `bitcoin-knots-over-tor` with desired profile and `Docker` with external volume name (if applicable).
+
+> Heads-up: running Bitcoin node will automatically trigger update.
+
+```console
+$ utilities/run.sh \
+  --profile bitcoin-knots-over-tor  \
+  --volume /Volumes/Docker
+```
+
+### Step 4: remove dangling images
+
+```console
+$ docker image prune
+```
+
 ## Caveats
 
 ### Fee estimates
