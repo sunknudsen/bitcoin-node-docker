@@ -6,6 +6,7 @@ green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 grey=$(tput setaf 8)
 normal=$(tput sgr0)
+el=$(tput el)
 
 label1="Memory pressure: "
 label2="Thermal pressure: "
@@ -21,9 +22,9 @@ interval="$default_interval"
 mem_status() {
   v=$(sysctl -n kern.memorystatus_vm_pressure_level 2>/dev/null)
   case $v in
-    1) printf "%s%sNormal%s" "$bold" "$green" "$normal" ;;
-    2) printf "%s%sWarning%s" "$bold" "$yellow" "$normal" ;;
-    4) printf "%s%sCritical%s" "$bold" "$red" "$normal" ;;
+    1) printf "${bold}${green}Normal${normal}" ;;
+    2) printf "${bold}${yellow}Warning${normal}" ;;
+    4) printf "${bold}${red}Critical${normal}" ;;
     *) printf "Unknown (%s)" "$v" ;;
   esac
 }
@@ -31,11 +32,11 @@ mem_status() {
 thermal_status() {
   v=$(sudo powermetrics -i 500 -n 1 -s thermal 2>/dev/null | awk -F ': *' '/Current pressure level/ {print $2; exit}')
   case "$v" in
-    Nominal) printf "%s%sNominal%s" "$bold" "$green" "$normal" ;;
-    Moderate) printf "%s%sModerate%s" "$bold" "$yellow" "$normal" ;;
-    Heavy) printf "%s%sHeavy%s" "$bold" "$red" "$normal" ;;
-    Trapping) printf "%s%sTrapping%s" "$bold" "$red" "$normal" ;;
-    Sleeping) printf "%s%sSleeping%s" "$bold" "$red" "$normal" ;;
+    Nominal) printf "${bold}${green}Nominal${normal}" ;;
+    Moderate) printf "${bold}${yellow}Moderate${normal}" ;;
+    Heavy) printf "${bold}${red}Heavy${normal}" ;;
+    Trapping) printf "${bold}${red}Trapping${normal}" ;;
+    Sleeping) printf "${bold}${red}Sleeping${normal}" ;;
     *) printf "%s" "$v" ;;
   esac
 }
@@ -45,7 +46,7 @@ disk_usage() {
   read -r total_blocks used_blocks available_blocks <<< "$df_output"
   
   if [[ -z "$total_blocks" ]]; then
-    printf "%s%sUnable to read disk usage%s" "$bold" "$red" "$normal"
+    printf "${bold}${red}Unable to read disk usage${normal}"
     return
   fi
   
@@ -58,21 +59,21 @@ disk_usage() {
     color="$yellow"
   fi
   
-  printf "%s%s%s%%%s" "$bold" "$color" "$v" "$normal"
+  printf "${bold}${color}%s%%${normal}" "$v"
 }
 
 print_status() {
   local mem_val=$(mem_status)
   local therm_val=$(thermal_status)
   local disk_val=$(disk_usage)
-  printf "%s%s$(tput el)\n%s%s$(tput el)\n%s%s$(tput el)\n" "$label1" "$mem_val" "$label2" "$therm_val" "$label3" "$disk_val"
+  printf "%s%s${el}\n%s%s${el}\n%s%s${el}\n" "$label1" "$mem_val" "$label2" "$therm_val" "$label3" "$disk_val"
 }
 
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   cat << EOF
 Usage: monitor.sh [OPTIONS] [INTERVAL]
 
-Display memory and thermal pressure and disk usage on macOS.
+Monitor memory and thermal pressure and disk usage on macOS.
 
 OPTIONS:
   -v, --volume VOLUME     Volume to monitor for disk usage
@@ -92,9 +93,7 @@ DESCRIPTION:
   - Yellow: Warning/moderate levels
   - Red: Critical/severe levels
   
-  Watch mode continuously updates output, useful for monitoring system
-  performance during intensive tasks or Docker operations.
-Exit watch mode using Ctrl+C.
+  Watch mode updates metrics using interval until interrupted using Ctrl+C.
 EOF
   exit 0
 fi

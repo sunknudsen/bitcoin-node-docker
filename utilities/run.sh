@@ -15,7 +15,7 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   cat << EOF
 Usage: run.sh [OPTIONS]
 
-Start Bitcoin node using Colima and Docker Compose.
+Run Bitcoin node using Colima and Docker Compose.
 
 OPTIONS:
   -p, --profile PROFILE   Docker Compose profile to use
@@ -32,9 +32,9 @@ DESCRIPTION:
   4. Running Docker Compose using specified profile
   5. Stopping Colima and ejecting volume when done
 
-  The script will keep system awake using caffeinate.
+  Then, it keeps system awake using caffeinate.
   
-  Available profiles:
+  Docker Compose profiles:
   - bitcoin-core-over-mullvad: Bitcoin Core over Mullvad VPN
   - bitcoin-core-over-tor: Bitcoin Core over Tor network
   - bitcoin-core-over-tor-outbound-only: Bitcoin Core over Tor network

@@ -88,7 +88,7 @@ $ colima --profile bitcoin-node start \
 
 > Heads-up: use `BITCOIND_MAX_UPLOAD_TARGET` to set daily upload target (defaults to unlimited, use `500M` for a 500MB per day upload target).
 
-> Heads-up: use `BITCOIND_PERSIST_MEMPOOL` to set mempool persistence (defaults to non-persistent, use `1` to enable mempool persistence if node runs 24/7[¹](#fee-estimates)).
+> Heads-up: use `BITCOIND_PERSIST_MEMPOOL` to set mempool persistence (defaults to non-persistent, use `1` to enable mempool persistence if node runs 24/7[<sup>1</sup>](#fee-estimates)).
 
 ```console
 $ cp .env.sample .env
@@ -166,7 +166,6 @@ $ utilities/run.sh \
   --volume /Volumes/Docker
 ```
 
-
 ### Run Bitcoin Core and route traffic over Tor (outbound-only)
 
 > Heads-up: replace `Docker` with external volume name (if applicable).
@@ -225,7 +224,7 @@ $ electrum/run.sh
 
 ### Create aliases
 
-> Heads-up: replace `$HOME/bitcoin-node-docker` with path to bitcoin-node-docker folder, `bitcoin-knots-over-tor` with preferred profile and `Docker` with external volume name (if applicable).
+> Heads-up: replace `$HOME/bitcoin-node-docker` with path to bitcoin-node-docker folder, `bitcoin-knots-over-tor` with desired profile and `Docker` with external volume name (if applicable).
 
 Once aliases have been created, one can run `bitcoin-node` to start Bitcoin node and `electrum` to start Electrum without data persistence.
 
