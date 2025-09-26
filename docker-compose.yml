@@ -174,7 +174,6 @@ services:
   bitcoin-knots:
     build:
       args:
-        - BITCOIN_KNOTS_MAJOR_VERSION=${BITCOIN_KNOTS_MAJOR_VERSION}
         - BITCOIN_KNOTS_VERSION=${BITCOIN_KNOTS_VERSION}
       context: ./services/bitcoin-knots
     cap_drop:
