@@ -240,7 +240,9 @@ sshPort: 0
 #
 # Colima default behaviour: $HOME is mounted as writable.
 # Default: []
-mounts: []
+mounts:
+  - location: ~/Library/Caches/colima
+    writable: true
 
 # Specify a custom disk image for the virtual machine.
 # When not specified, Colima downloads an appropriate disk image from Github at
