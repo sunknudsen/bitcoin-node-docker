@@ -21,9 +21,7 @@ If you don’t have a spare enclosure and 2TB NVMe disk, here are two great opti
 
 Both of these options can usually be purchased on Amazon (preferrably shipped and sold by Amazon for warranty).
 
-When using a Mac with passive cooling, running [utilities/monitor.sh](utilities/monitor.sh) is recommended.
-
-If thermal pressure isn’t nominal (green), using a stand and a fan is recommended during initial block download.
+When using a Mac with passive cooling, running [utilities/monitor.sh](utilities/monitor.sh) is recommended. If thermal pressure isn’t nominal (green), using a stand and a fan is recommended during initial block download.
 
 ## Setup
 
