@@ -96,7 +96,7 @@ fi
 
 colima --profile bitcoin-node start
 
-caffeinate docker compose \
+docker compose \
   --profile "$profile" \
   --project-directory "$project_directory" \
   up

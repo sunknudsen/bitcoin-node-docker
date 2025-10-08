@@ -51,8 +51,10 @@ $ brew analytics off
 
 ### Step 4: install dependencies
 
+> Heads-up: [wakeful](https://github.com/sunknudsen/wakeful) is used to prevent automatic sleep, gracefully stop Docker Compose services and eject external volume before computer sleeps.
+
 ```console
-$ brew install colima docker docker-compose
+$ brew install colima docker docker-compose sunknudsen/tap/wakeful
 ```
 
 ### Step 5: configure [Docker](https://docs.docker.com/)
@@ -111,7 +113,7 @@ $ utilities/update-dotenv.sh
 > Heads-up: running Bitcoin node will automatically trigger update.
 
 ```console
-$ utilities/run.sh \
+$ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-knots-over-tor  \
   --volume /Volumes/Docker
 ```
@@ -149,7 +151,7 @@ Using Tor outbound-only profile is recommended when running node on the go over 
 ```console
 $ mullvad connect
 
-$ utilities/run.sh \
+$ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-core-over-mullvad \
   --volume /Volumes/Docker
 ```
@@ -159,7 +161,7 @@ $ utilities/run.sh \
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
 ```console
-$ utilities/run.sh \
+$ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-core-over-tor  \
   --volume /Volumes/Docker
 ```
@@ -169,7 +171,7 @@ $ utilities/run.sh \
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
 ```console
-$ utilities/run.sh \
+$ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-core-over-tor-outbound-only  \
   --volume /Volumes/Docker
 ```
@@ -183,7 +185,7 @@ $ utilities/run.sh \
 ```console
 $ mullvad connect
 
-$ utilities/run.sh \
+$ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-knots-over-mullvad  \
   --volume /Volumes/Docker
 ```
@@ -193,7 +195,7 @@ $ utilities/run.sh \
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
 ```console
-$ utilities/run.sh \
+$ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-knots-over-tor  \
   --volume /Volumes/Docker
 ```
@@ -203,7 +205,7 @@ $ utilities/run.sh \
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
 ```console
-$ utilities/run.sh \
+$ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-knots-over-tor-outbound-only  \
   --volume /Volumes/Docker
 ```
@@ -231,7 +233,7 @@ Once aliases have been created, one can run `bitcoin-node` to start Bitcoin node
 ```console
 $ cat << 'EOF' >> $HOME/.zshrc
 # Set bitcoin-node-docker aliases
-alias bitcoin-node="$HOME/bitcoin-node-docker/utilities/run.sh --profile bitcoin-knots-over-tor --volume /Volumes/Docker"
+alias bitcoin-node="wakeful --grace-period 600 $HOME/bitcoin-node-docker/utilities/run.sh --profile bitcoin-knots-over-tor --volume /Volumes/Docker"
 alias electrum="$HOME/Code/sunknudsen/bitcoin-node-docker/electrum/run.sh"
 EOF
 
