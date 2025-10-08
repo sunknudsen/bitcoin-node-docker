@@ -1,6 +1,8 @@
 # bitcoin-node-docker
 
-This [Docker Compose](https://docs.docker.com/compose/) project is used to run a Bitcoin node on Apple silicon Mac running macOS storing blockchain data on external APFS (Encrypted) volume.
+## Run a Bitcoin node on Apple silicon
+
+This [Docker Compose](https://docs.docker.com/compose/) template is used to run a Bitcoin node on Apple silicon Mac running macOS storing blockchain dataset on external APFS (Encrypted) volume.
 
 One can either use [Bitcoin Core](https://bitcoincore.org/) or [Bitcoin Knots](https://bitcoinknots.org/) and route traffic over [Mullvad](https://mullvad.net/en) or [Tor](https://www.torproject.org/) for additional privacy (Docker containers do not have direct Internet access, are isolated from macOS host and run as read-only).
 
