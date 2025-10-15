@@ -110,13 +110,13 @@ $ utilities/update-dotenv.sh
 
 ### Step 3: run Bitcoin node
 
-> Heads-up: replace `bitcoin-knots-over-tor` with desired profile and `Docker` with external volume name (if applicable).
+> Heads-up: replace `bitcoin-core-over-tor` with desired profile and `Docker` with external volume name (if applicable).
 
 > Heads-up: running Bitcoin node will automatically trigger update.
 
 ```console
 $ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-knots-over-tor  \
+  --profile bitcoin-core-over-tor  \
   --volume /Volumes/Docker
 ```
 
@@ -226,7 +226,7 @@ $ electrum/run.sh
 
 ### Create aliases
 
-> Heads-up: replace `$HOME/bitcoin-node-docker` with path to bitcoin-node-docker folder, `bitcoin-knots-over-tor` with desired profile and `Docker` with external volume name (if applicable).
+> Heads-up: replace `$HOME/bitcoin-node-docker` with path to bitcoin-node-docker folder, `bitcoin-core-over-tor` with desired profile and `Docker` with external volume name (if applicable).
 
 Once aliases have been created, one can run `bitcoin-node` to start Bitcoin node and `electrum` to start Electrum without data persistence.
 
@@ -235,7 +235,7 @@ Once aliases have been created, one can run `bitcoin-node` to start Bitcoin node
 ```console
 $ cat << 'EOF' >> $HOME/.zshrc
 # Set bitcoin-node-docker aliases
-alias bitcoin-node="wakeful --grace-period 600 $HOME/bitcoin-node-docker/utilities/run.sh --profile bitcoin-knots-over-tor --volume /Volumes/Docker"
+alias bitcoin-node="wakeful --grace-period 600 $HOME/bitcoin-node-docker/utilities/run.sh --profile bitcoin-core-over-tor --volume /Volumes/Docker"
 alias electrum="$HOME/Code/sunknudsen/bitcoin-node-docker/electrum/run.sh"
 EOF
 

@@ -5,7 +5,7 @@ red=$(tput setaf 1)
 normal=$(tput sgr0)
 
 default_volume="/Volumes/Docker"
-default_profile="bitcoin-knots-over-tor"
+default_profile="bitcoin-core-over-tor"
 volume="$default_volume"
 profile="$default_profile"
 
