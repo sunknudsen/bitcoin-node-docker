@@ -42,10 +42,10 @@ tor_version=$(curl -fsSL https://deb.torproject.org/torproject.org/dists/bookwor
   | awk '/^Package: tor$/ {getline; if ($1=="Version:"){sub(/-.*/,"",$2); print $2; exit}}')
 
 printf "${bold}Proposed updates for .env${normal}:\n"
-printf "BITCOIN_CORE_VERSION=%s\n" "$bitcoin_core_version"
-printf "BITCOIN_KNOTS_VERSION=%s\n" "$bitcoin_knots_version"
-printf "ELECTRS_VERSION=%s\n" "$electrs_version"
-printf "TOR_VERSION=%s\n\n" "$tor_version"
+printf "BITCOIN_CORE_VERSION=%s\n" "\"$bitcoin_core_version\""
+printf "BITCOIN_KNOTS_VERSION=%s\n" "\"$bitcoin_knots_version\""
+printf "ELECTRS_VERSION=%s\n" "\"$electrs_version\""
+printf "TOR_VERSION=%s\n\n" "\"$tor_version\""
 
 if [ "$dry_run" = true ]; then
   exit 0
