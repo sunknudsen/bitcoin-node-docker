@@ -236,7 +236,7 @@ Once aliases have been created, one can run `bitcoin-node` to start Bitcoin node
 $ cat << 'EOF' >> $HOME/.zshrc
 # Set bitcoin-node-docker aliases
 alias bitcoin-node="wakeful --grace-period 600 $HOME/bitcoin-node-docker/utilities/run.sh --profile bitcoin-core-over-tor --volume /Volumes/Docker"
-alias electrum="$HOME/Code/sunknudsen/bitcoin-node-docker/electrum/run.sh"
+alias electrum="$HOME/bitcoin-node-docker/electrum/run.sh"
 EOF
 
 $ source $HOME/.zshrc
