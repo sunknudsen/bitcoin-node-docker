@@ -148,7 +148,7 @@ Using Tor outbound-only profile is recommended when running node on the go over 
 
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
-> Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
+> Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [subscription](https://mullvad.net/en/pricing) and using [WireGuard](https://mullvad.net/en/servers?status=true&type=wireguard) server.
 
 ```console
 $ mullvad connect
@@ -182,7 +182,7 @@ $ wakeful --grace-period 600 utilities/run.sh \
 
 > Heads-up: replace `Docker` with external volume name (if applicable).
 
-> Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [plan](https://mullvad.net/en/pricing).
+> Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [subscription](https://mullvad.net/en/pricing) and using [WireGuard](https://mullvad.net/en/servers?status=true&type=wireguard) server.
 
 ```console
 $ mullvad connect
