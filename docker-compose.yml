@@ -72,6 +72,7 @@ services:
         -listenonion=1
         -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
+        -nodebuglogfile
         -onion=172.18.0.2:9050
         -onlynet=onion
         -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
@@ -100,6 +101,7 @@ services:
         -discover=0
         -listen=1
         -natpmp=0
+        -nodebuglogfile
         -noonion=1
         -onlynet=ipv4
         -proxy=10.64.0.1:1080
@@ -133,6 +135,7 @@ services:
         -listenonion=1
         -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
+        -nodebuglogfile
         -onion=172.18.0.2:9050
         -onlynet=onion
         -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
@@ -165,6 +168,7 @@ services:
         -listen=1
         -listenonion=0
         -natpmp=0
+        -nodebuglogfile
         -onion=172.18.0.2:9050
         -onlynet=onion
         -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
@@ -211,6 +215,7 @@ services:
         -listenonion=1
         -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
+        -nodebuglogfile
         -onion=172.18.0.2:9050
         -onlynet=onion
         -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
@@ -239,6 +244,7 @@ services:
         -discover=0
         -listen=1
         -natpmp=0
+        -nodebuglogfile
         -noonion=1
         -onlynet=ipv4
         -proxy=10.64.0.1:1080
@@ -272,6 +278,7 @@ services:
         -listenonion=1
         -maxuploadtarget=${BITCOIND_MAX_UPLOAD_TARGET}
         -natpmp=0
+        -nodebuglogfile
         -onion=172.18.0.2:9050
         -onlynet=onion
         -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
@@ -304,6 +311,7 @@ services:
         -listen=1
         -listenonion=0
         -natpmp=0
+        -nodebuglogfile
         -onion=172.18.0.2:9050
         -onlynet=onion
         -persistmempool=${BITCOIND_PERSIST_MEMPOOL}
