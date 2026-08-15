@@ -56,7 +56,7 @@ $ brew analytics off
 > Heads-up: [wakeful](https://github.com/sunknudsen/wakeful) is used to prevent automatic sleep, gracefully stop Docker Compose services and eject external volume before computer sleeps.
 
 ```console
-$ brew install colima docker docker-compose sunknudsen/tap/wakeful
+$ brew install colima docker docker-buildx docker-compose sunknudsen/tap/wakeful
 ```
 
 ### Step 5: configure [Docker](https://docs.docker.com/)
@@ -199,7 +199,7 @@ $ electrum/run.sh
 ### Step 2: upgrade dependencies
 
 ```console
-$ brew upgrade colima docker docker-compose sunknudsen/tap/wakeful
+$ brew upgrade colima docker docker-buildx docker-compose sunknudsen/tap/wakeful
 ```
 
 ### Step 3: upgrade repo
@@ -256,4 +256,14 @@ alias electrum="$HOME/bitcoin-node-docker/electrum/run.sh"
 EOF
 
 $ source $HOME/.zshrc
+```
+
+### Clone bitcoin-node-docker dataset
+
+Cloning copies dataset to destination volume which becomes ready-to-run COLIMA_HOME volume (once cloned, run node using `utilities/run.sh --volume /Volumes/Clone`). Cloned volume can be shared without revealing anything about one’s addresses or transactions.
+
+> Heads-up: replace `/Volumes/Clone` with destination volume name (destination volume should be as large as COLIMA_HOME volume and keep same volume name when running node) and use `--volume` to override COLIMA_HOME volume (if applicable).
+
+```console
+$ utilities/clone.sh --destination /Volumes/Clone
 ```

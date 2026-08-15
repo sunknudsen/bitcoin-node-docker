@@ -11,10 +11,4 @@ RUN addgroup tor \
   && adduser --disabled-password --gecos "" --ingroup tor tor
 RUN chown tor:tor /var/lib/tor
 # See https://2019.www.torproject.org/docs/tor-manual.html.en
-RUN cat > /etc/tor/torrc <<EOF
-CookieAuthentication 1
-ControlPort 172.18.0.2:9051
-DataDirectory /var/lib/tor
-SocksPolicy accept 172.18.0.3, reject *
-SocksPort 172.18.0.2:9050
-EOF
+COPY --chmod=644 torrc /etc/tor/torrc

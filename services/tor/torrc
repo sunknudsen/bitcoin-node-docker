@@ -1,0 +1,5 @@
+CookieAuthentication 1
+ControlPort 172.18.0.2:9051
+DataDirectory /var/lib/tor
+SocksPolicy accept 172.18.0.3, reject *
+SocksPort 172.18.0.2:9050
