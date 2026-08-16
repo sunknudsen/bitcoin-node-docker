@@ -204,12 +204,12 @@ $ brew upgrade colima docker docker-buildx docker-compose sunknudsen/tap/wakeful
 
 ### Step 3: upgrade repo
 
-> Heads-up: replace `v2.0.5` with desired [release](https://github.com/sunknudsen/bitcoin-node-docker/releases) tag.
+> Heads-up: replace `v2.0.6` with desired [release](https://github.com/sunknudsen/bitcoin-node-docker/releases) tag.
 
 ```console
 $ git pull
 
-$ git checkout v2.0.5
+$ git checkout v2.0.6
 ```
 
 ### Step 4: update .env
