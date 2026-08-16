@@ -12,7 +12,7 @@ force="${2}"
 source_uuid="${3}"
 destination_uuid="${4}"
 
-printf "${bold}Installing rsync…${normal}\n" >&2
+printf "${bold}Installing rsync…${normal}\n"
 
 apt-get update > /dev/null
 
@@ -77,7 +77,7 @@ total=$(du --bytes --summarize \
   "${source_volumes}/${project_name}_electrs/_data" \
   | awk '{ sum += $1 } END { printf "%.0f\n", sum }')
 
-printf "${bold}Cloning about %sGB of dataset…${normal}\n" "$((total / 1000000000))" >&2
+printf "${bold}Cloning about %sGB of dataset…${normal}\n" "$((total / 1000000000))"
 
 rsync --archive --delete --info=progress2 \
   "${source_volumes}/${project_name}_bitcoind/_data/blocks" \
@@ -95,4 +95,4 @@ chown 1000:1000 \
 
 umount /mnt/source /mnt/destination
 
-printf "${bold}Cloned dataset${normal}\n" >&2
+printf "${bold}Cloned dataset${normal}\n"
