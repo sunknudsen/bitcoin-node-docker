@@ -69,6 +69,8 @@ $ cp config.json.sample $HOME/.docker/config.json
 
 ### Step 6: configure [Colima](https://github.com/abiosoft/colima)
 
+> Heads-up: skip this step when using [cloned dataset](#clone-bitcoin-node-docker-dataset) (Colima is already configured on cloned volume).
+
 > Heads-up: replace `Docker` with external volume name and adjust `cpu` and `memory` if hardware can handle heavier workloads (defaults are optimized for Apple silicon MacBook Air computers with 8GB of memory and passive cooling).
 
 ```console
@@ -92,8 +94,12 @@ $ colima --profile bitcoin-node start \
 
 > Heads-up: use `BITCOIND_PERSIST_MEMPOOL` to set mempool persistence (defaults to non-persistent, use `1` to enable mempool persistence if node runs 24/7[<sup>1</sup>](#fee-estimates)).
 
+> Heads-up: use `utilities/update-dotenv.sh` to update .env to desired versions (updating `TOR_VERSION` to latest version is required given Tor package repository only indexes latest version).
+
 ```console
 $ cp .env.sample .env
+
+$ utilities/update-dotenv.sh
 ```
 
 ## Caveats
@@ -214,7 +220,7 @@ $ git checkout v2.0.6
 
 ### Step 4: update .env
 
-> Heads-up: use `utilities/update-dotenv.sh` to update .env to latest versions which may be [contentious](https://www.youtube.com/watch?v=FZ-nD9hSaeg) (use `--dry-run` to display latest versions without updating .env).
+> Heads-up: use `utilities/update-dotenv.sh` to update .env to desired versions (updating `TOR_VERSION` to latest version is required given Tor package repository only indexes latest version).
 
 ```console
 $ utilities/update-dotenv.sh
@@ -260,7 +266,9 @@ $ source $HOME/.zshrc
 
 ### Clone bitcoin-node-docker dataset
 
-Cloning copies dataset to destination volume which becomes ready-to-run COLIMA_HOME volume (once cloned, run node using `utilities/run.sh --volume /Volumes/Clone`). Cloned volume can be shared without revealing anything about one’s addresses or transactions.
+Cloning copies dataset to destination volume (once cloned, run node using `utilities/run.sh --volume /Volumes/Clone`). Cloned volume can be shared without revealing anything about one’s addresses or transactions.
+
+When using cloned volume on another Mac, complete [setup](#setup) steps 1 to 5 and step 7 (skip step 6 given Colima is already configured on cloned volume) and run node (images are built on first run and node syncs blocks mined since dataset was cloned).
 
 > Heads-up: replace `/Volumes/Clone` with destination volume name (destination volume should be as large as COLIMA_HOME volume and keep same volume name when running node) and use `--volume` to override COLIMA_HOME volume (if applicable).
 

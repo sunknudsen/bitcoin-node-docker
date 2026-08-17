@@ -51,8 +51,7 @@ Description:
   settings.json are excluded so dataset can be shared without
   revealing anything about one’s addresses or transactions.
 
-  Destination volume becomes ready-to-run COLIMA_HOME volume (use
-  run.sh --volume to run node using destination volume).
+  Once cloned, run node using run.sh --volume <destination>.
 
   Destination volume should be as large as COLIMA_HOME volume.
 EOF

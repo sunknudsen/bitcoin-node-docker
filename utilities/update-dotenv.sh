@@ -3,33 +3,26 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-dry_run=false
-
 if [[ "${1}" == "-h" || "${1}" == "--help" ]]; then
   cat << EOF
-Usage: update-dotenv.sh [OPTIONS]
+Usage: update-dotenv.sh [options]
 
 Update .env with latest version of Bitcoin Core, Bitcoin Knots, Electrs and Tor.
 
-OPTIONS:
-  -d, --dry-run  Show latest versions without updating .env
+Options:
   -h, --help     Show this help message
 
-DESCRIPTION:
+Description:
   This script fetches latest version of:
   - Bitcoin Core using GitHub releases
   - Bitcoin Knots using GitHub releases
   - Electrs using GitHub releases
   - Tor using package repository
 
-  By default, it asks for user confirmation before updating .env when
-  updates are available.
+  It asks for user confirmation before updating .env when updates are
+  available.
 EOF
   exit 0
-fi
-
-if [[ "${1}" == "-d" || "${1}" == "--dry-run" ]]; then
-  dry_run=true
 fi
 
 bitcoin_core_version=$(curl -fsSL https://api.github.com/repos/bitcoin/bitcoin/releases/latest \
@@ -79,10 +72,6 @@ printf "BITCOIN_CORE_VERSION=%s%s\n" "${bitcoin_core_version}" "${bitcoin_core_a
 printf "BITCOIN_KNOTS_VERSION=%s%s\n" "${bitcoin_knots_version}" "${bitcoin_knots_annotation}"
 printf "ELECTRS_VERSION=%s%s\n" "${electrs_version}" "${electrs_annotation}"
 printf "TOR_VERSION=%s%s\n\n" "${tor_version}" "${tor_annotation}"
-
-if [ "$dry_run" = true ]; then
-  exit 0
-fi
 
 # Bitcoin Core
 if [[ -z "${bitcoin_core_annotation}" ]]; then
