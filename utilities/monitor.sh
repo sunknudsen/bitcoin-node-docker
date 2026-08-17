@@ -78,7 +78,7 @@ Monitor memory and thermal pressure and disk usage on macOS.
 Options:
   -v, --volume <volume>   Volume to monitor for disk usage
                           (default: $default_volume)
-  -w, --watch <inverval>  Enable watch mode with updates every INTERVAL seconds
+  -w, --watch <interval>  Enable watch mode with updates every <interval> seconds
                           (default: $default_interval)
   -h, --help              Show this help message
 

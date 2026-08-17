@@ -2,14 +2,14 @@
 
 if [[ "${1}" == "-h" || "${1}" == "--help" ]]; then
   cat << EOF
-Usage: electrum.sh [OPTIONS]
+Usage: run.sh [options]
 
 Start Electrum without data persistence using RAM disk.
 
-OPTIONS:
+Options:
   -h, --help  Show this help message
 
-DESCRIPTION:
+Description:
   This script starts Electrum without data persistence by:
   1. Creating a 100MB RAM disk
   2. Partitioning RAM disk using APFS filesystem

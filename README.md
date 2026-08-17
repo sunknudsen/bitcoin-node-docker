@@ -21,7 +21,7 @@ If you don’t have a spare enclosure and 2TB NVMe disk, here are two great opti
 
 **Performance option:** [OWC Express 1M2](https://www.owc.com/solutions/express-1m2) + [2TB SAMSUNG 990 PRO M.2 2280 NVMe](https://www.samsung.com/us/computing/memory-storage/solid-state-drives/990-pro-pcie-4-0-nvme-ssd-2tb-mz-v9p2t0b-am/)
 
-Both of these options can usually be purchased on Amazon (preferrably shipped and sold by Amazon for warranty).
+Both of these options can usually be purchased on Amazon (preferably shipped and sold by Amazon for warranty).
 
 When using a Mac with passive cooling, running [utilities/monitor.sh](utilities/monitor.sh) is recommended. If thermal pressure isn’t nominal (green), using a stand and a fan is recommended during initial block download.
 
@@ -140,7 +140,7 @@ $ wakeful --grace-period 600 utilities/run.sh \
 
 ```console
 $ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-core-over-tor  \
+  --profile bitcoin-core-over-tor \
   --volume /Volumes/Docker
 ```
 
@@ -150,7 +150,7 @@ $ wakeful --grace-period 600 utilities/run.sh \
 
 ```console
 $ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-core-over-tor-outbound-only  \
+  --profile bitcoin-core-over-tor-outbound-only \
   --volume /Volumes/Docker
 ```
 
@@ -164,7 +164,7 @@ $ wakeful --grace-period 600 utilities/run.sh \
 $ mullvad connect
 
 $ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-knots-over-mullvad  \
+  --profile bitcoin-knots-over-mullvad \
   --volume /Volumes/Docker
 ```
 
@@ -174,7 +174,7 @@ $ wakeful --grace-period 600 utilities/run.sh \
 
 ```console
 $ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-knots-over-tor  \
+  --profile bitcoin-knots-over-tor \
   --volume /Volumes/Docker
 ```
 
@@ -184,7 +184,7 @@ $ wakeful --grace-period 600 utilities/run.sh \
 
 ```console
 $ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-knots-over-tor-outbound-only  \
+  --profile bitcoin-knots-over-tor-outbound-only \
   --volume /Volumes/Docker
 ```
 
@@ -234,7 +234,7 @@ $ utilities/update-dotenv.sh
 
 ```console
 $ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-core-over-tor  \
+  --profile bitcoin-core-over-tor \
   --volume /Volumes/Docker
 ```
 
@@ -266,11 +266,11 @@ $ source $HOME/.zshrc
 
 ### Clone bitcoin-node-docker dataset
 
-Cloning copies dataset to destination volume (once cloned, run node using `utilities/run.sh --volume /Volumes/Clone`). Cloned volume can be shared without revealing anything about one’s addresses or transactions.
+Cloning copies dataset to destination volume (once cloned, run node from destination volume using `utilities/run.sh`). Cloned volume can be shared without revealing anything about one’s addresses or transactions.
 
 When using cloned volume on another Mac, complete [setup](#setup) steps 1 to 5 and step 7 (skip step 6 given Colima is already configured on cloned volume) and run node (images are built on first run and node syncs blocks mined since dataset was cloned).
 
-> Heads-up: replace `/Volumes/Clone` with destination volume name (destination volume should be as large as COLIMA_HOME volume and keep same volume name when running node) and use `--volume` to override COLIMA_HOME volume (if applicable).
+> Heads-up: replace `/Volumes/Clone` with destination volume name (destination volume should be as large as source volume and keep same volume name when running node) and use `--volume` to override source volume (if applicable).
 
 ```console
 $ utilities/clone.sh --destination /Volumes/Clone

@@ -32,14 +32,12 @@ Description:
   4. Running Docker Compose using specified profile
   5. Stopping Colima and ejecting volume when done
 
-  Then, it keeps system awake using caffeinate.
-  
   Docker Compose profiles:
   - bitcoin-core-over-mullvad: Bitcoin Core over Mullvad VPN
   - bitcoin-core-over-tor: Bitcoin Core over Tor network
   - bitcoin-core-over-tor-outbound-only: Bitcoin Core over Tor network
     (outbound-only)
-  - bitcoin-knots-over-mullvad: Bitcoin Knots over Mullvad VPN  
+  - bitcoin-knots-over-mullvad: Bitcoin Knots over Mullvad VPN
   - bitcoin-knots-over-tor: Bitcoin Knots over Tor network
   - bitcoin-knots-over-tor-outbound-only: Bitcoin Knots over Tor network
     (outbound-only)

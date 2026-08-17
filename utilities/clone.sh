@@ -16,7 +16,7 @@ if [[ "${1}" == "-h" || "${1}" == "--help" ]]; then
   cat << EOF
 Usage: clone.sh [options]
 
-Clone dataset to destination COLIMA_HOME volume.
+Clone dataset to destination volume.
 
 Options:
   -d, --destination <destination>   Volume to use for destination
@@ -29,7 +29,7 @@ Options:
 
 Description:
   This script clones dataset by:
-  1. Checking if COLIMA_HOME and destination volumes are mounted
+  1. Checking if source and destination volumes are mounted
   2. Making sure source virtual machine is stopped
   3. Provisioning destination virtual machine and Docker volumes
   4. Creating near-instant copy-on-write APFS clone of source data
@@ -53,7 +53,7 @@ Description:
 
   Once cloned, run node using run.sh --volume <destination>.
 
-  Destination volume should be as large as COLIMA_HOME volume.
+  Destination volume should be as large as source volume.
 EOF
   exit 0
 fi
