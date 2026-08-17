@@ -4,7 +4,7 @@
 
 This [Docker Compose](https://docs.docker.com/compose/) template is used to run a Bitcoin node on Apple silicon Mac running macOS storing blockchain dataset on external APFS (Encrypted) volume.
 
-One can either use [Bitcoin Core](https://bitcoincore.org/) or [Bitcoin Knots](https://bitcoinknots.org/) and route traffic over [Mullvad](https://mullvad.net/en) or [Tor](https://www.torproject.org/) for additional privacy (Docker containers do not have direct Internet access, are isolated from macOS host and run as read-only).
+One can either use [Bitcoin Core](https://bitcoincore.org/) or [Bitcoin Knots](https://bitcoinknots.org/) and route traffic over [Mullvad](https://mullvad.net/en) or [Tor](https://www.torproject.org/) for additional privacy (Docker containers are isolated from macOS host, run as read-only and, except `tor`, do not have direct Internet access).
 
 An [Electrs](https://github.com/romanz/electrs) server is the only exposed service to which [Electrum](https://electrum.org/) can connect on macOS via `127.0.0.1:50001`.
 
@@ -192,7 +192,7 @@ $ wakeful --grace-period 600 utilities/run.sh \
 
 > Heads-up: requires Electrum [app](https://electrum.org/#download).
 
-> Heads-up: run script used to start Electrum without data persistence using RAM disk.
+> Heads-up: `electrum/run.sh` starts Electrum without data persistence using RAM disk.
 
 ```console
 $ electrum/run.sh
@@ -270,7 +270,7 @@ Cloning copies dataset to destination volume (once cloned, run node from destina
 
 When using cloned volume on another Mac, complete [setup](#setup) steps 1 to 5 and step 7 (skip step 6 given Colima is already configured on cloned volume) and run node (images are built on first run and node syncs blocks mined since dataset was cloned).
 
-> Heads-up: replace `/Volumes/Clone` with destination volume name (destination volume should be as large as source volume and keep same volume name when running node) and use `--volume` to override source volume (if applicable).
+> Heads-up: replace `/Volumes/Clone` with destination volume name (destination volume should be as large as source volume and keep same volume name when running node) and use `--source` to override source volume (if applicable).
 
 ```console
 $ utilities/clone.sh --destination /Volumes/Clone

@@ -4,10 +4,10 @@ bold=$(tput bold)
 red=$(tput setaf 1)
 normal=$(tput sgr0)
 
-default_volume="/Volumes/Docker"
+default_source="/Volumes/Docker"
+source="${default_source}"
 destination=""
 force="false"
-volume="${default_volume}"
 
 project_directory=$(cd "$(dirname "${0}")" && cd ../ && pwd)
 project_name=$(basename "${project_directory}" | tr "[:upper:]" "[:lower:]")
@@ -19,12 +19,11 @@ Usage: clone.sh [options]
 Clone dataset to destination volume.
 
 Options:
-  -d, --destination <destination>   Volume to use for destination
-                                    COLIMA_HOME
+  -s, --source <source>             Volume to use as source
+                                    (default: $default_source)
+  -d, --destination <destination>   Volume to use as destination
   -f, --force                       Clone even if destination dataset
                                     is ahead of source dataset
-  -v, --volume <volume>             Volume to use for COLIMA_HOME
-                                    (default: $default_volume)
   -h, --help                        Show this help message
 
 Description:
@@ -34,16 +33,16 @@ Description:
   3. Provisioning destination virtual machine and Docker volumes
   4. Creating near-instant copy-on-write APFS clone of source data
      disk (source data disk is never opened)
-  5. Starting temporary clone virtual machine (profile
-     bitcoin-node-clone) and attaching destination data disk and
-     source data disk clone as virtio block devices (fastest disk I/O
+  5. Starting temporary worker virtual machine (profile
+     bitcoin-node-worker) and attaching source data disk clone and
+     destination data disk as virtio block devices (fastest disk I/O
      path)
   6. Making sure destination dataset is not ahead of source dataset
-     (protects against reversing --volume and --destination)
+     (protects against reversing --source and --destination)
   7. Copying blocks, chainstate and indexes from bitcoind volume and
      everything from electrs volume using rsync (interrupted cloning
      can be resumed by running clone.sh again)
-  8. Deleting temporary clone virtual machine and source data disk
+  8. Deleting temporary worker virtual machine and source data disk
      clone
 
   Node-specific files such as anchors.dat, banlist.json,
@@ -60,6 +59,16 @@ fi
 
 while [[ $# -gt 0 ]]; do
   case "${1}" in
+    -s|--source)
+      if [[ -n "${2}" && ! "${2}" =~ ^- ]]; then
+        source="${2}"
+        shift
+      else
+        echo "Error: --source requires a value" >&2
+        exit 1
+      fi
+      shift
+      ;;
     -d|--destination)
       if [[ -n "${2}" && ! "${2}" =~ ^- ]]; then
         destination="${2}"
@@ -72,16 +81,6 @@ while [[ $# -gt 0 ]]; do
       ;;
     -f|--force)
       force="true"
-      shift
-      ;;
-    -v|--volume)
-      if [[ -n "${2}" && ! "${2}" =~ ^- ]]; then
-        volume="${2}"
-        shift
-      else
-        echo "Error: --volume requires value" >&2
-        exit 1
-      fi
       shift
       ;;
     -h|--help)
@@ -103,8 +102,8 @@ if [[ -z "${destination}" ]]; then
   exit 1
 fi
 
-if [[ "${destination}" == "${volume}" ]]; then
-  echo "Error: --destination cannot match --volume" >&2
+if [[ "${destination}" == "${source}" ]]; then
+  echo "Error: --source cannot match --destination" >&2
   exit 1
 fi
 
@@ -113,7 +112,7 @@ if ! command -v limactl > /dev/null; then
   exit 1
 fi
 
-export COLIMA_HOME="${volume}"
+export COLIMA_HOME="${source}"
 
 if ! mount | grep "on ${COLIMA_HOME} (" | grep -q "apfs"; then
   echo "Error: Please connect ${COLIMA_HOME} (must be APFS volume)" >&2
@@ -130,10 +129,11 @@ if colima list --json 2> /dev/null | grep -q '"status":"Running"'; then
   exit 1
 fi
 
-source_datadisk="${volume}/_lima/_disks/colima-bitcoin-node/datadisk"
+source_datadisk="${source}/_lima/_disks/colima-bitcoin-node/datadisk"
 destination_datadisk="${destination}/_lima/_disks/colima-bitcoin-node/datadisk"
-clone_directory="${volume}/bitcoin-node-clone"
-clone_symlink="${destination}/_lima/_disks/bitcoin-node-clone-source"
+clone_directory="${source}/bitcoin-node-dataset-source"
+source_symlink="${destination}/_lima/_disks/bitcoin-node-dataset-source"
+destination_symlink="${destination}/_lima/_disks/bitcoin-node-dataset-destination"
 
 if [[ ! -f "${source_datadisk}" ]]; then
   echo "Error: Cannot find ${source_datadisk}" >&2
@@ -141,7 +141,7 @@ if [[ ! -f "${source_datadisk}" ]]; then
 fi
 
 destination_docker_host="unix://${destination}/bitcoin-node/docker.sock"
-worker_docker_host="unix://${destination}/bitcoin-node-clone/docker.sock"
+worker_docker_host="unix://${destination}/bitcoin-node-worker/docker.sock"
 
 if [[ ! -f "${destination}/bitcoin-node/colima.yaml" ]]; then
   mkdir -p "${destination}/bitcoin-node"
@@ -198,35 +198,48 @@ if [[ -z "${source_uuid}" || -z "${destination_uuid}" || "${source_uuid}" == "${
   exit 1
 fi
 
-trap 'COLIMA_HOME="${destination}" colima --profile bitcoin-node-clone stop > /dev/null 2>&1; COLIMA_HOME="${destination}" colima --profile bitcoin-node-clone delete --force > /dev/null 2>&1; rm -f "${clone_symlink}" "${clone_directory}/datadisk" "${clone_directory}/in_use_by"; rmdir "${clone_directory}" 2> /dev/null' EXIT
+clean_up() {
+  COLIMA_HOME="${destination}" colima --profile bitcoin-node-worker stop > /dev/null 2>&1
+  COLIMA_HOME="${destination}" colima --profile bitcoin-node-worker delete --force > /dev/null 2>&1
+  rm -f "${source_symlink}" "${destination_symlink}" "${clone_directory}/datadisk" "${clone_directory}/in_use_by"
+  rmdir "${clone_directory}" 2> /dev/null
+  if grep -qs "bitcoin-node-worker" "${destination}/_lima/_disks/colima-bitcoin-node/in_use_by"; then
+    rm -f "${destination}/_lima/_disks/colima-bitcoin-node/in_use_by"
+  fi
+}
+
+trap clean_up EXIT
 
 printf "${bold}Creating copy-on-write clone of source data disk…${normal}\n"
 
-rm -f "${clone_symlink}" "${clone_directory}/datadisk" "${clone_directory}/in_use_by"
+clean_up
 
 mkdir -p "${clone_directory}"
 
 cp -c "${source_datadisk}" "${clone_directory}/datadisk"
 
-ln -s "${clone_directory}" "${clone_symlink}"
+ln -s "${clone_directory}" "${source_symlink}"
 
-printf "${bold}Starting temporary clone virtual machine…${normal}\n"
+ln -s "${destination}/_lima/_disks/colima-bitcoin-node" "${destination_symlink}"
 
-COLIMA_HOME="${destination}" colima --profile bitcoin-node-clone start \
+printf "${bold}Starting temporary worker virtual machine…${normal}\n"
+
+COLIMA_HOME="${destination}" colima --profile bitcoin-node-worker start \
   --cpu 2 \
   --disk 10 \
   --memory 2 \
   --vm-type vz
 
-COLIMA_HOME="${destination}" colima --profile bitcoin-node-clone stop
+COLIMA_HOME="${destination}" colima --profile bitcoin-node-worker stop
 
-if ! LIMA_HOME="${destination}/_lima" limactl --log-level error edit colima-bitcoin-node-clone --tty=false --set '.additionalDisks = [{"name": "colima-bitcoin-node", "format": false}, {"name": "bitcoin-node-clone-source", "format": false}]'; then
-  echo "Error: Cannot attach data disks to temporary clone virtual machine" >&2
+# bitcoin-node-dataset-source is symlink to source data disk clone and bitcoin-node-dataset-destination is symlink to destination data disk (colima-bitcoin-node, name assigned by Colima)
+if ! LIMA_HOME="${destination}/_lima" limactl --log-level error edit colima-bitcoin-node-worker --tty=false --set '.additionalDisks = [{"name": "bitcoin-node-dataset-source", "format": false}, {"name": "bitcoin-node-dataset-destination", "format": false}]'; then
+  echo "Error: Cannot attach data disks to temporary worker virtual machine" >&2
   exit 1
 fi
 
-if ! LIMA_HOME="${destination}/_lima" limactl --log-level error start colima-bitcoin-node-clone; then
-  echo "Error: Cannot start temporary clone virtual machine" >&2
+if ! LIMA_HOME="${destination}/_lima" limactl --log-level error start colima-bitcoin-node-worker; then
+  echo "Error: Cannot start temporary worker virtual machine" >&2
   exit 1
 fi
 
@@ -239,11 +252,11 @@ DOCKER_HOST="${worker_docker_host}" docker run --env TERM --interactive --privil
 
 status=$?
 
-printf "${bold}Deleting temporary clone virtual machine…${normal}\n"
+printf "${bold}Deleting temporary worker virtual machine…${normal}\n"
 
-COLIMA_HOME="${destination}" colima --profile bitcoin-node-clone stop
+COLIMA_HOME="${destination}" colima --profile bitcoin-node-worker stop
 
-COLIMA_HOME="${destination}" colima --profile bitcoin-node-clone delete --force
+COLIMA_HOME="${destination}" colima --profile bitcoin-node-worker delete --force
 
 if [[ "${status}" != "0" ]]; then
   echo "Error: Cloning failed, please run clone.sh again to resume" >&2

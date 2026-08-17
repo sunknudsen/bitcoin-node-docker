@@ -25,47 +25,41 @@ EOF
   exit 0
 fi
 
-bitcoin_core_version=$(curl -fsSL https://api.github.com/repos/bitcoin/bitcoin/releases/latest \
-  | grep '"tag_name":' | sed -E 's/.*"v?([^"]+)".*/\1/')
-bitcoin_knots_version=$(curl -fsSL https://api.github.com/repos/bitcoinknots/bitcoin/releases/latest \
-  | grep '"tag_name":' | sed -E 's/.*"v?([^"]+)".*/\1/')
-electrs_version=$(curl -fsSL https://api.github.com/repos/romanz/electrs/releases/latest \
-  | grep '"tag_name":' | sed -E 's/.*"v?([^"]+)".*/\1/')
+github_version() {
+  curl -fsSL "https://api.github.com/repos/${1}/releases/latest" \
+    | grep '"tag_name":' | sed -E 's/.*"v?([^"]+)".*/\1/'
+}
+
+annotation() {
+  current=$(grep "^${1}=" .env | cut -d "=" -f 2)
+  if [[ -z "${2}" ]]; then
+    printf " (could not fetch)"
+  elif [[ "${2}" == "${current}" ]]; then
+    printf " (up to date)"
+  fi
+}
+
+update_version() {
+  if [[ -n "${3}" ]]; then
+    return 0
+  fi
+  printf "${bold}Update ${1} to %s (y or n)?${normal} " "${2}"
+  read -r answer
+  if [ "${answer}" = "y" ]; then
+    sed -i '' "s/^${1}=.*/${1}=${2}/" .env
+  fi
+}
+
+bitcoin_core_version=$(github_version bitcoin/bitcoin)
+bitcoin_knots_version=$(github_version bitcoinknots/bitcoin)
+electrs_version=$(github_version romanz/electrs)
 tor_version=$(curl -fsSL https://deb.torproject.org/torproject.org/dists/bookworm/main/binary-arm64/Packages \
   | awk '/^Package: tor$/ {getline; if ($1=="Version:"){sub(/-.*/,"",$2); print $2; exit}}')
 
-current_bitcoin_core_version=$(grep "^BITCOIN_CORE_VERSION=" .env | cut -d "=" -f 2)
-current_bitcoin_knots_version=$(grep "^BITCOIN_KNOTS_VERSION=" .env | cut -d "=" -f 2)
-current_electrs_version=$(grep "^ELECTRS_VERSION=" .env | cut -d "=" -f 2)
-current_tor_version=$(grep "^TOR_VERSION=" .env | cut -d "=" -f 2)
-
-bitcoin_core_annotation=""
-if [[ -z "${bitcoin_core_version}" ]]; then
-  bitcoin_core_annotation=" (could not fetch)"
-elif [[ "${bitcoin_core_version}" == "${current_bitcoin_core_version}" ]]; then
-  bitcoin_core_annotation=" (up to date)"
-fi
-
-bitcoin_knots_annotation=""
-if [[ -z "${bitcoin_knots_version}" ]]; then
-  bitcoin_knots_annotation=" (could not fetch)"
-elif [[ "${bitcoin_knots_version}" == "${current_bitcoin_knots_version}" ]]; then
-  bitcoin_knots_annotation=" (up to date)"
-fi
-
-electrs_annotation=""
-if [[ -z "${electrs_version}" ]]; then
-  electrs_annotation=" (could not fetch)"
-elif [[ "${electrs_version}" == "${current_electrs_version}" ]]; then
-  electrs_annotation=" (up to date)"
-fi
-
-tor_annotation=""
-if [[ -z "${tor_version}" ]]; then
-  tor_annotation=" (could not fetch)"
-elif [[ "${tor_version}" == "${current_tor_version}" ]]; then
-  tor_annotation=" (up to date)"
-fi
+bitcoin_core_annotation=$(annotation BITCOIN_CORE_VERSION "${bitcoin_core_version}")
+bitcoin_knots_annotation=$(annotation BITCOIN_KNOTS_VERSION "${bitcoin_knots_version}")
+electrs_annotation=$(annotation ELECTRS_VERSION "${electrs_version}")
+tor_annotation=$(annotation TOR_VERSION "${tor_version}")
 
 printf "${bold}Latest versions${normal}:\n"
 printf "BITCOIN_CORE_VERSION=%s%s\n" "${bitcoin_core_version}" "${bitcoin_core_annotation}"
@@ -73,40 +67,9 @@ printf "BITCOIN_KNOTS_VERSION=%s%s\n" "${bitcoin_knots_version}" "${bitcoin_knot
 printf "ELECTRS_VERSION=%s%s\n" "${electrs_version}" "${electrs_annotation}"
 printf "TOR_VERSION=%s%s\n\n" "${tor_version}" "${tor_annotation}"
 
-# Bitcoin Core
-if [[ -z "${bitcoin_core_annotation}" ]]; then
-  printf "${bold}Update BITCOIN_CORE_VERSION to %s (y or n)?${normal} " "${bitcoin_core_version}"
-  read -r answer
-  if [ "${answer}" = "y" ]; then
-    sed -i '' "s/^BITCOIN_CORE_VERSION=.*/BITCOIN_CORE_VERSION=${bitcoin_core_version}/" .env
-  fi
-fi
-
-# Bitcoin Knots
-if [[ -z "${bitcoin_knots_annotation}" ]]; then
-  printf "${bold}Update BITCOIN_KNOTS_VERSION to %s (y or n)?${normal} " "${bitcoin_knots_version}"
-  read -r answer
-  if [ "${answer}" = "y" ]; then
-    sed -i '' "s/^BITCOIN_KNOTS_VERSION=.*/BITCOIN_KNOTS_VERSION=${bitcoin_knots_version}/" .env
-  fi
-fi
-
-# Electrs
-if [[ -z "${electrs_annotation}" ]]; then
-  printf "${bold}Update ELECTRS_VERSION to %s (y or n)?${normal} " "${electrs_version}"
-  read -r answer
-  if [ "${answer}" = "y" ]; then
-    sed -i '' "s/^ELECTRS_VERSION=.*/ELECTRS_VERSION=${electrs_version}/" .env
-  fi
-fi
-
-# Tor
-if [[ -z "${tor_annotation}" ]]; then
-  printf "${bold}Update TOR_VERSION to %s (y or n)?${normal} " "${tor_version}"
-  read -r answer
-  if [ "${answer}" = "y" ]; then
-    sed -i '' "s/^TOR_VERSION=.*/TOR_VERSION=${tor_version}/" .env
-  fi
-fi
+update_version BITCOIN_CORE_VERSION "${bitcoin_core_version}" "${bitcoin_core_annotation}"
+update_version BITCOIN_KNOTS_VERSION "${bitcoin_knots_version}" "${bitcoin_knots_annotation}"
+update_version ELECTRS_VERSION "${electrs_version}" "${electrs_annotation}"
+update_version TOR_VERSION "${tor_version}" "${tor_annotation}"
 
 printf "\nDone\n"
