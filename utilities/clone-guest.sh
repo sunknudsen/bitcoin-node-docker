@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Runs inside privileged container on temporary clone virtual machine (see clone.sh)
+# Runs inside privileged container on temporary worker virtual machine (see clone.sh)
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -44,29 +44,29 @@ mount "${source_device}" /mnt/source
 
 mount "${destination_device}" /mnt/destination
 
-volume_directory=$(find /mnt/source -maxdepth 6 -type d -path "*/volumes/${project_name}_bitcoind" -print -quit)
+dataset_volumes() {
+  volume_directory=$(find "${1}" -maxdepth 6 -type d -path "*/volumes/${project_name}_bitcoind" -print -quit)
+  if [[ -z "${volume_directory}" ]]; then
+    return 1
+  fi
+  dirname "${volume_directory}"
+}
 
-if [[ -z "${volume_directory}" ]]; then
+if ! source_volumes=$(dataset_volumes /mnt/source); then
   echo "Error: Cannot find source Docker volumes (make sure source virtual machine was stopped gracefully)" >&2
   exit 1
 fi
 
-source_volumes=$(dirname "${volume_directory}")
-
-volume_directory=$(find /mnt/destination -maxdepth 6 -type d -path "*/volumes/${project_name}_bitcoind" -print -quit)
-
-if [[ -z "${volume_directory}" ]]; then
+if ! destination_volumes=$(dataset_volumes /mnt/destination); then
   echo "Error: Cannot find destination Docker volumes (make sure destination virtual machine was stopped gracefully)" >&2
   exit 1
 fi
-
-destination_volumes=$(dirname "${volume_directory}")
 
 source_height=$(find "${source_volumes}/${project_name}_bitcoind/_data/blocks" -maxdepth 1 -name "blk*.dat" -printf "%f\n" 2> /dev/null | sort | tail --lines 1 | tr --complement --delete "0-9" || true)
 destination_height=$(find "${destination_volumes}/${project_name}_bitcoind/_data/blocks" -maxdepth 1 -name "blk*.dat" -printf "%f\n" 2> /dev/null | sort | tail --lines 1 | tr --complement --delete "0-9" || true)
 
 if [[ "${force}" != "true" && -n "${source_height}" && -n "${destination_height}" ]] && (( 10#${destination_height} > 10#${source_height} )); then
-  echo "Error: Destination dataset is ahead of source dataset (are --volume and --destination reversed? use --force to override)" >&2
+  echo "Error: Destination dataset is ahead of source dataset (are --source and --destination reversed? use --force to override)" >&2
   exit 1
 fi
 

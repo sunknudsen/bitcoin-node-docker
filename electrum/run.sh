@@ -13,7 +13,7 @@ Description:
   This script starts Electrum without data persistence by:
   1. Creating a 100MB RAM disk
   2. Partitioning RAM disk using APFS filesystem
-  3. Starting Electrum using oneserver to only connect to local Bitcoin node
+  3. Starting Electrum using --oneserver to only connect to local Bitcoin node
   4. Storing wallet on RAM disk (/Volumes/tmp/holding)
   5. Automatically ejecting RAM disk when done
 EOF
