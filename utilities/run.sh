@@ -78,6 +78,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 export COLIMA_HOME="${volume}"
+export DOCKER_HOST="unix://${COLIMA_HOME}/bitcoin-node/docker.sock"
 
 if ! mount | grep -q "on ${COLIMA_HOME}"; then
   echo "Error: Please connect ${COLIMA_HOME}" >&2
