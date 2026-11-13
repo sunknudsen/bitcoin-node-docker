@@ -4,7 +4,7 @@
 
 This [Docker Compose](https://docs.docker.com/compose/) template is used to run a Bitcoin node on Apple silicon Mac running macOS storing blockchain dataset on external APFS (Encrypted) volume.
 
-One can either use [Bitcoin Core](https://bitcoincore.org/) or [Bitcoin Knots](https://bitcoinknots.org/) and route traffic over [Mullvad](https://mullvad.net/en) or [Tor](https://www.torproject.org/) for additional privacy (Docker containers are isolated from macOS host, run as read-only and, except `tor`, do not have direct Internet access).
+One can route [Bitcoin Core](https://bitcoincore.org/) traffic over [Mullvad](https://mullvad.net/en) or [Tor](https://www.torproject.org/) for additional privacy (Docker containers are isolated from macOS host, run as read-only and, except `tor`, do not have direct Internet access).
 
 An [Electrs](https://github.com/romanz/electrs) server is the only exposed service to which [Electrum](https://electrum.org/) can connect on macOS via `127.0.0.1:50001`.
 
@@ -151,40 +151,6 @@ $ wakeful --grace-period 600 utilities/run.sh \
 ```console
 $ wakeful --grace-period 600 utilities/run.sh \
   --profile bitcoin-core-over-tor-outbound-only \
-  --volume /Volumes/Docker
-```
-
-### Run Bitcoin Knots and route traffic over Mullvad
-
-> Heads-up: replace `Docker` with external volume name (if applicable).
-
-> Heads-up: requires Mullvad [app](https://mullvad.net/en/download/vpn/macos) and [subscription](https://mullvad.net/en/pricing) and using [WireGuard](https://mullvad.net/en/servers?status=true&type=wireguard) server.
-
-```console
-$ mullvad connect
-
-$ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-knots-over-mullvad \
-  --volume /Volumes/Docker
-```
-
-### Run Bitcoin Knots and route traffic over Tor
-
-> Heads-up: replace `Docker` with external volume name (if applicable).
-
-```console
-$ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-knots-over-tor \
-  --volume /Volumes/Docker
-```
-
-### Run Bitcoin Knots and route traffic over Tor (outbound-only)
-
-> Heads-up: replace `Docker` with external volume name (if applicable).
-
-```console
-$ wakeful --grace-period 600 utilities/run.sh \
-  --profile bitcoin-knots-over-tor-outbound-only \
   --volume /Volumes/Docker
 ```
 
